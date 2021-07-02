@@ -1,7 +1,6 @@
 site_name: Curso de Python GIS
 theme: material
 
-
 site_url: "https://255ribeiro.github.io/curso_python_gis/"
 repo_url: "https://github.com/255ribeiro/curso_python_gis/"
 repo_name: "255ribeiro/curso_python_gis" 
@@ -21,15 +20,12 @@ nav:
     - Geopandas: geo_py/geopandas.md
   - Referências: ref/ref.md
 
-
-
-# markdown_extensions:
-#   - toc:
-#       toc_depth: 3
+markdown_extensions:
+  - toc:
+      toc_depth: 3
 
 extra_css:
   - css/extra_css.css
-
 
 plugins:
   - mkdocs-jupyter
