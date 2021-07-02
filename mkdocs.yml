@@ -19,7 +19,7 @@ nav:
       - pandas: dados_py/pandas.md
   - Dados geoespaciais:
     - Geopandas: geo_py/geopandas.md
-  - Referências: ref/ref.m
+  - Referências: ref/ref.md
 
 custom_dir: overrides
 
