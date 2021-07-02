@@ -2,7 +2,9 @@ site_name: Curso de Python GIS
 theme: material
 
 
-toc: Conteúdo
+site_url: 
+repo_url: https://github.com/255ribeiro/curso_python_gis
+repo_name:  255ribeiro/curso_python_gis 
 
 nav:
   - Home: index.md
@@ -10,14 +12,14 @@ nav:
   - Primeiros Passos com o Python: intro_py\intro_py.md
   - Programação Científica com o Python:
       - numpy: cientif_py\numpy.md
-      - scipy: cientif_py\scimpy.md
+      - scipy: cientif_py\scipy.md
       - matplotlib: cientif_py\plt.md
       - Jupyter notebooks: cientif_py\jupyter.md
   - Manipulação de dados:
       - pandas: dados_py/pandas.md
   - Dados geoespaciais:
-    - Geopandas: geo_py/geopandas.mg
-  - Referências: ref/ref.md
+    - Geopandas: geo_py/geopandas.md
+  - Referências: ref/ref.m
 
 custom_dir: overrides
 

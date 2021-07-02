@@ -1,8 +1,8 @@
-# Primeiros passos com o Python
+# Primeiros Passos com o Python
 
-# Console Python
+## Console Python
 
-# Variáveis
+## Variáveis
 
 * Atribuição de valor
 
@@ -12,5 +12,5 @@
     * string
     * bool
 
-* Editores de código
-  * entrada e saída de dados
+# Editores de código
+  * entrada e saída de dadoss
