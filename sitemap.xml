@@ -6,6 +6,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://255ribeiro.github.io/curso_python_gis/cientif_py/jupyter_intro/</loc>
+         <lastmod>2021-07-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://255ribeiro.github.io/curso_python_gis/cientif_py/numpy/</loc>
          <lastmod>2021-07-02</lastmod>
          <changefreq>daily</changefreq>
@@ -22,6 +27,11 @@
     </url>
     <url>
          <loc>https://255ribeiro.github.io/curso_python_gis/dados_py/pandas/</loc>
+         <lastmod>2021-07-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://255ribeiro.github.io/curso_python_gis/dados_py/pandas_intro/</loc>
          <lastmod>2021-07-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
