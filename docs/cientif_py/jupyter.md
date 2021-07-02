@@ -1,1 +1,0 @@
-# Jupyter Notebooks e arquivos *.ipynb

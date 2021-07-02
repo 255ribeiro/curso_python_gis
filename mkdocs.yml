@@ -14,7 +14,7 @@ nav:
       - numpy: cientif_py\numpy.md
       - scipy: cientif_py\scipy.md
       - matplotlib: cientif_py\plt.md
-      - Jupyter notebooks: cientif_py\jupyter.md
+      - Jupyter notebooks: cientif_py\jupyter_intro.ipynb
   - Manipulação de dados:
       - pandas: dados_py/pandas.md
   - Dados geoespaciais:
