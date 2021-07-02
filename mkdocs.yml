@@ -2,9 +2,9 @@ site_name: Curso de Python GIS
 theme: material
 
 
-site_url: 
-repo_url: https://github.com/255ribeiro/curso_python_gis
-repo_name:  255ribeiro/curso_python_gis 
+site_url: "https://255ribeiro.github.io/curso_python_gis/"
+repo_url: "https://github.com/255ribeiro/curso_python_gis/"
+repo_name: "255ribeiro/curso_python_gis" 
 
 nav:
   - Home: index.md
