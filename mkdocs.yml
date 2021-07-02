@@ -1,5 +1,9 @@
 site_name: Curso de Python GIS
-theme: material
+theme:
+  name: material   
+  language: en-custom
+  custom_dir: docs\overrides
+  
 
 site_url: "https://255ribeiro.github.io/curso_python_gis/"
 repo_url: "https://github.com/255ribeiro/curso_python_gis/"
@@ -25,7 +29,7 @@ markdown_extensions:
       toc_depth: 3
 
 extra_css:
-  - css/extra_css.css
+  - overrides/css/extra_css.css
 
 plugins:
   - mkdocs-jupyter
