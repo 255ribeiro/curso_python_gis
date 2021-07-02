@@ -1,0 +1,29 @@
+site_name: Curso de Python GIS
+theme: material
+
+
+toc: Conteúdo
+
+nav:
+  - Home: index.md
+  - Instalação do Python: intro_py\instala.md
+  - Primeiros Passos com o Python: intro_py\intro_py.md
+  - Programação Científica com o Python:
+      - numpy: cientif_py\numpy.md
+      - scipy: cientif_py\scimpy.md
+      - matplotlib: cientif_py\plt.md
+      - Jupyter notebooks: cientif_py\jupyter.md
+  - Manipulação de dados:
+      - pandas: dados_py/pandas.md
+  - Dados geoespaciais:
+    - Geopandas: geo_py/geopandas.mg
+  - Referências: ref/ref.md
+
+custom_dir: overrides
+
+# markdown_extensions:
+#   - toc:
+#       toc_depth: 3
+
+extra_css:
+  - css/extra_css.css
