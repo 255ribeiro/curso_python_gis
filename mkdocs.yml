@@ -21,7 +21,7 @@ nav:
     - Geopandas: geo_py/geopandas.md
   - Referências: ref/ref.md
 
-custom_dir: overrides
+
 
 # markdown_extensions:
 #   - toc:
