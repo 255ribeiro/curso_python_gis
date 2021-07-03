@@ -2,6 +2,9 @@
 
 ## Console Python
 
+
+
+
 ## Variáveis
 
 * Atribuição de valor
