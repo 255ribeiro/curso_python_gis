@@ -33,3 +33,4 @@ extra_css:
 
 plugins:
   - mkdocs-jupyter
+      include_source: True
