@@ -22,8 +22,8 @@ theme:
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: yellow
-      accent: amber
+      primary: amber
+      accent: orange
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
