@@ -6,6 +6,10 @@ Automatizando o trabalho de Gis utilizando a linguagem de programação Python.
 
 PPGM - UEFS
 
+## Professor:
+
+Fernando Ferraz Ribeiro
+
 ## Objetivos:
 
 1. Apresentar uma base de lógica de programação

@@ -61,7 +61,8 @@ A simplicidade da interface IDLE é uma vantagem quando se esta começando a pro
 
 
     !!! warning
-         Caso tenha instalado a distribuição em um outro caminho e não saiba qual veja as instruções no [link](./extra_config.md)
+         Caso tenha instalado a distribuição em um outro caminho e não saiba qual veja as instruções no link:
+         [Encontrando a pasta de instalação da distribuição Anaconda](./extra_config.md)
 
 3.  Copie o caminho para o IDLE e clique em avançar
     ![](figs/atalho_03.jpg)
