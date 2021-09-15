@@ -77,3 +77,11 @@ A simplicidade da interface IDLE é uma vantagem quando se esta começando a pro
 
     ![](figs/idle_hello_world.jpg)
 
+## Instalando o gerenciador de pacotes Mamba (opcional)
+
+![](figs/instala_pacote_01.jpg)
+
+No **prompt**, digite:
+
+``` conda install mamba -n base -c conda-forge ```
+
