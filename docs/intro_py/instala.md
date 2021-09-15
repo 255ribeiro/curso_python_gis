@@ -85,7 +85,7 @@ No **prompt**, digite:
 
 ``` conda install mamba -n base -c conda-forge ```
 
-Aperte a tecla enter e siga as instruções de instalação
+Aperte a tecla **enter** e siga as instruções de instalação e aguarde o final do processo.
 
 ![](figs/mamba_install.png)
 
