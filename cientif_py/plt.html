@@ -9,21 +9,21 @@
       
       
       
-        <link rel="canonical" href="https://255ribeiro.github.io/curso_python_gis/index.html">
+        <link rel="canonical" href="https://255ribeiro.github.io/curso_python_gis/cientif_py/plt.html">
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.6">
     
     
       
-        <title>Curso de Python GIS</title>
+        <title>matplotlib - Curso de Python GIS</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.802231af.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.802231af.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
         
       
     
@@ -38,7 +38,7 @@
     
     
     
-      <link rel="stylesheet" href="overrides/css/extra_css.css">
+      <link rel="stylesheet" href="../overrides/css/extra_css.css">
     
     
       
@@ -59,7 +59,7 @@
     <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
   
     
-    <script>function __prefix(e){return new URL(".",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
       <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
@@ -68,11 +68,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#curso-de-python-gis" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -80,7 +75,7 @@
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="index.html" title="Curso de Python GIS" class="md-header__button md-logo" aria-label="Curso de Python GIS" data-md-component="logo">
+    <a href="../index.html" title="Curso de Python GIS" class="md-header__button md-logo" aria-label="Curso de Python GIS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -99,7 +94,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              matplotlib
             
           </span>
         </div>
@@ -167,7 +162,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="index.html" title="Curso de Python GIS" class="md-nav__button md-logo" aria-label="Curso de Python GIS" data-md-component="logo">
+    <a href="../index.html" title="Curso de Python GIS" class="md-nav__button md-logo" aria-label="Curso de Python GIS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -197,21 +192,11 @@
 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="index.html" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
         Home
       </a>
-      
     </li>
   
 
@@ -224,7 +209,7 @@
   
   
     <li class="md-nav__item">
-      <a href="intro_py/instala.html" class="md-nav__link">
+      <a href="../intro_py/instala.html" class="md-nav__link">
         Instalação do Python
       </a>
     </li>
@@ -239,7 +224,7 @@
   
   
     <li class="md-nav__item">
-      <a href="intro_py/intro_py.html" class="md-nav__link">
+      <a href="../intro_py/intro_py.html" class="md-nav__link">
         Primeiros Passos com o Python
       </a>
     </li>
@@ -252,12 +237,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
       
       <label class="md-nav__link" for="__nav_4">
         Programação Científica com o Python
@@ -275,7 +262,7 @@
   
   
     <li class="md-nav__item">
-      <a href="cientif_py/numpy.html" class="md-nav__link">
+      <a href="numpy.html" class="md-nav__link">
         numpy
       </a>
     </li>
@@ -287,7 +274,7 @@
   
   
     <li class="md-nav__item">
-      <a href="cientif_py/scipy.html" class="md-nav__link">
+      <a href="scipy.html" class="md-nav__link">
         scipy
       </a>
     </li>
@@ -297,11 +284,19 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="cientif_py/plt.html" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="plt.html" class="md-nav__link md-nav__link--active">
         matplotlib
       </a>
+      
     </li>
   
 
@@ -311,7 +306,7 @@
   
   
     <li class="md-nav__item">
-      <a href="cientif_py/jupyter_intro.html" class="md-nav__link">
+      <a href="jupyter_intro.html" class="md-nav__link">
         Jupyter notebooks
       </a>
     </li>
@@ -353,7 +348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dados_py/pandas.html" class="md-nav__link">
+      <a href="../dados_py/pandas.html" class="md-nav__link">
         pandas
       </a>
     </li>
@@ -395,7 +390,7 @@
   
   
     <li class="md-nav__item">
-      <a href="geo_py/geopandas.html" class="md-nav__link">
+      <a href="../geo_py/geopandas.html" class="md-nav__link">
         Geopandas
       </a>
     </li>
@@ -416,7 +411,7 @@
   
   
     <li class="md-nav__item">
-      <a href="ref/ref.html" class="md-nav__link">
+      <a href="../ref/ref.html" class="md-nav__link">
         Referências
       </a>
     </li>
@@ -438,26 +433,14 @@
 
 
                 
-                  <a href="https://github.com/255ribeiro/curso_python_gis/edit/master/docs/index.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/255ribeiro/curso_python_gis/edit/master/docs/cientif_py/plt.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="curso-de-python-gis">Curso de Python Gis</h1>
-<p>Automatizando o trabalho de Gis utilizando a linguagem de programação Python.</p>
-<h2 id="organizacao">Organização:</h2>
-<p>PPGM - UEFS</p>
-<h2 id="professor">Professor:</h2>
-<p>Fernando Ferraz Ribeiro</p>
-<h2 id="objetivos">Objetivos:</h2>
-<ol>
-<li>Apresentar uma base de lógica de programação</li>
-<li>Apresentar os fundamentos da linguagem Python</li>
-<li>Apresentar fundamentos de algumas das principais bibliotecas da programação científica do Python</li>
-<li>Apresentar fundamentos de algumas das bibliotecas de manipulação de dados geoespacias do Python</li>
-</ol>
-<h2 id="publico-alvo">Público alvo:</h2>
-<p>Alunos, pesquisadores e profissionais interessados na manipulação de informações geoespaciais e programação.</p>
+                  <h1>matplotlib</h1>
+                
+                
                 
               
 
@@ -477,15 +460,30 @@
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
+        
+        <a href="scipy.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: scipy" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              scipy
+            </div>
+          </div>
+        </a>
+      
       
         
-        <a href="intro_py/instala.html" class="md-footer__link md-footer__link--next" aria-label="Next: Instalação do Python" rel="next">
+        <a href="jupyter_intro.html" class="md-footer__link md-footer__link--next" aria-label="Next: Jupyter notebooks" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Instalação do Python
+              Jupyter notebooks
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -555,10 +553,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": ".", "features": ["toc.integrate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.409db549.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["toc.integrate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.409db549.min.js", "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.756773cc.min.js"></script>
+      <script src="../assets/javascripts/bundle.756773cc.min.js"></script>
       
     
   </body>

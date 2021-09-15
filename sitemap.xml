@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/index.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/cientif_py/jupyter_intro/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/cientif_py/jupyter_intro.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/cientif_py/numpy/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/cientif_py/numpy.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/cientif_py/plt/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/cientif_py/plt.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/cientif_py/scipy/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/cientif_py/scipy.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/dados_py/pandas/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/dados_py/pandas.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/dados_py/pandas_intro/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/dados_py/pandas_intro.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/geo_py/geemap/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/geo_py/geemap.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/geo_py/geemap_intro/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/geo_py/geemap_intro.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/geo_py/geopandas/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/geo_py/geopandas.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/intro_py/extra_config/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/intro_py/extra_config.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/intro_py/instala/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/intro_py/instala.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/intro_py/intro_py/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/intro_py/intro_py.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://255ribeiro.github.io/curso_python_gis/ref/ref/</loc>
+         <loc>https://255ribeiro.github.io/curso_python_gis/ref/ref.html</loc>
          <lastmod>2021-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
