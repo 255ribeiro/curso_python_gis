@@ -1,19 +1,19 @@
 # Curso de Python Gis
 
+Automatizando o trabalho de Gis utilizando a linguagem de programação Python.
+
 ## Organização:
 
-
+PPGM - UEFS
 
 ## Objetivos:
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+1. Apresentar uma base de lógica de programação
+1. Apresentar os fundamentos da linguagem Python
+1. Apresentar fundamentos de algumas das principais bibliotecas da programação científica do Python
+1. Apresentar fundamentos de algumas das bibliotecas de manipulação de dados geoespacias do Python
 
 ## Público alvo:
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+Alunos, pesquisadores e profissionais interessados na manipulação de informações geoespaciais e programação.
+

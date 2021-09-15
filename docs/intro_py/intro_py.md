@@ -2,9 +2,6 @@
 
 ## Console Python
 
-
-
-
 ## Variáveis
 
 * Atribuição de valor
@@ -16,4 +13,4 @@
     * bool
 
 # Editores de código
-  * entrada e saída de dadoss
+  * entrada e saída de dados
