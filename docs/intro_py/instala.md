@@ -65,7 +65,7 @@ A simplicidade da interface IDLE é uma vantagem quando se esta começando a pro
 
 
     !!! warning
-         Caso tenha instalado a distribuição em um outro caminho e não saiba qual veja as instruções no link:
+         Caso tenha instalado a distribuição em um outro caminho e não saiba qual, ou não tenha conseguido localizar o IDLE com as instruções acima, acesse o link:
          [Encontrando a pasta de instalação da distribuição Anaconda](./extra_config.md)
 
 3.  Copie o caminho para o IDLE e clique em avançar
@@ -79,7 +79,33 @@ A simplicidade da interface IDLE é uma vantagem quando se esta começando a pro
 
     ![](figs/idle_hello_world.jpg)
 
+## Instalando o Chocolatley (opcional)
+
+Os sitemas operacionais baseados em Linux, bem como o MacOs, possuem aplicações de linha de comando para instalar *software*. Este tipo de recurso é muito prático na resolução de problemas e conflitos. Atualmente o Windows está testando um software do género, chamado Win-get. Enquanto o win-get não estiver suficientemente robusto, a melhor alternativa para este tipo de tarefa é um programa desenvolvido por terceiros, o **Chocolatey**.
+
+Abra um terminal o **Windows PowerShell** como administrador. Para verificar as permissões de instalação de programas via powershell, digite e cole o código abaixo:
+
+```Get-ExecutionPolicy```
+
+Caso a resposta seja ```Restricted``` copie e cole o código abaixo:
+
+```Set-ExecutionPolicy AllSigned```
+
+Para instalar o **Chocolatey**, copie e cole o código abaixo:
+
+``` Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) ```
+
+
+
+
 ## Instalando o gerenciador de pacotes Mamba (opcional)
+
+A distribuição Anaconda instala uma aplicação de linha de comando ```conda```. Essa aplicação serve para gerenciar pacotes e ambientes no Python. Com o crescimento do número de pacotes a validação da compatibilidade dos pacotes via ```conda```, em alguns casos, apresenta alguma lentidão. Alternativamente uma outra aplicação de gerenciamento de pacotes desenvolvida pela comunidade tem apresentado maior velocidade na instalação e validação de pacotes. Essa aplicação chama-se ```Mamba```.
+
+É possível instalar a aplicação ```Mamba```através da ```conda```. Clique no menu iniciar, na pasta Anaconda3, clique com o botão direito no **Anaconda prompt (anaconda3)**, clique em mais e escolha a opção **Executar como administrador**.
+
+!!! Note Nota
+    É sempre recomendado executar o **prompt** como administrador para instalar pacotes
 
 ![](figs/instala_pacote_01.jpg)
 
@@ -90,6 +116,7 @@ No **prompt**, digite:
 Aperte a tecla **enter** e siga as instruções de instalação e aguarde o final do processo.
 
 ![](figs/mamba_install.png)
+
 
 
 #### FIM

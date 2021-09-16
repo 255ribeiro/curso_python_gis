@@ -1,4 +1,4 @@
-# Curso de Python Gis
+# Minicurso de Python e Gis
 
 Automatizando o trabalho de Gis utilizando a linguagem de programação Python.
 
