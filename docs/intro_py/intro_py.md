@@ -1,4 +1,4 @@
-# Primeiros Passos com o Python
+# Primeiros Passos
 
 ## Console Python
 

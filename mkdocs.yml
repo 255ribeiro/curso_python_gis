@@ -37,9 +37,9 @@ repo_name: "255ribeiro/curso_python_gis"
 
 nav:
   - Home: index.md
-  - Instalação do Python: intro_py\instala.md
-  - Primeiros Passos com o Python: intro_py\intro_py.md
-  - Programação Científica com o Python:
+  - Instalação das ferramentas: intro_py\instala.md
+  - Primeiros Passos: intro_py\intro_py.md
+  - Programação Científica:
       - numpy: cientif_py\numpy.md
       - scipy: cientif_py\scipy.md
       - matplotlib: cientif_py\plt.md
