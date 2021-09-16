@@ -2,13 +2,7 @@
 
 Automatizando o trabalho de Gis utilizando a linguagem de programação Python.
 
-## Organização:
-
-PPGM - UEFS
-
-## Professor:
-
-Fernando Ferraz Ribeiro
+![python](https://www.python.org/static/img/python-logo@2x.png)
 
 ## Objetivos:
 
