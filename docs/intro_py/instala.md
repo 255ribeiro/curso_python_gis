@@ -2,6 +2,8 @@
 
 A distribuição oficial do CPython pode ser encontrada na página da Python Foundation, [Python.org](https://www.python.org/). Embora este seja um material rico sobre a linguagem, neste curso vamos utilizar a distribuição **Anaconda**.
 
+## Instalação da distribuição Anaconda
+
 **Anaconda** é uma distribuição do Python orientada para programação científica e análise de dados. A página oficial da distribuição é [anaconda.com](https://www.anaconda.com)
 
 ![anaconda inc](figs/anaconda_inc.png)
