@@ -12,5 +12,10 @@
     * string
     * bool
 
-# Editores de código
-  * entrada e saída de dados
+## Editores de código
+
+* entrada e saída de dados
+
+[Exrcício Baskara](./Bhaskara.pdf)
+
+
