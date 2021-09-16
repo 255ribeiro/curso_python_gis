@@ -66,6 +66,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://255ribeiro.github.io/curso_python_gis/intro_py/variaveis_e_operadores.html</loc>
+         <lastmod>2021-09-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://255ribeiro.github.io/curso_python_gis/ref/ref.html</loc>
          <lastmod>2021-09-16</lastmod>
          <changefreq>daily</changefreq>
