@@ -23,7 +23,6 @@
 
 [Exrcício Baskara](./Bhaskara.pdf)
 
-
 ## Variáveis compostas pt.1
 
 * Listas
@@ -31,18 +30,19 @@
   
 ## Controle de fluxo
 
-* Repetições
-
-    * while
-    * for
-    * recursividade
-
-
 * Condicionais lógicas
 
     * if
     * else
     * elif
+
+
+
+* Repetições
+
+    * while
+    * for
+    * recursividade
 
 
 
