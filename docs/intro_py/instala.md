@@ -61,7 +61,7 @@ A simplicidade da interface IDLE é uma vantagem quando se esta começando a pro
    - Quando a distribuição conda é instalada apenas para o usuário atual **(just me)** use:<br> ```%USERPROFILE%\anaconda3\Scripts\idle.exe``` <br> ou <br> ```%USERPROFILE%\anaconda3\Lib\idlelib\idle.pyw```<br><br>
 
 
-   - Quando a distribuição conda é instalada para todos os usuários **(all users)** <span style="color: red;"> (conferir caminho) </span>:<br> ```%PROGRAMDATA%\anaconda3\Scripts\idle.exe``` <br> ou <br> ```%PROGRAMDATA%\anaconda3\Lib\idlelib\idle.pyw``` <br><br>
+   - Quando a distribuição conda é instalada para todos os usuários **(all users)**:<br> ```%PROGRAMDATA%\anaconda3\Scripts\idle.exe``` <br> ou <br> ```%PROGRAMDATA%\anaconda3\Lib\idlelib\idle.pyw``` <br><br>
 
 
     !!! warning
