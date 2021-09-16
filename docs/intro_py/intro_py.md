@@ -12,12 +12,14 @@
     * string
     * bool
 
+[Variáveis e operadores](./variaveis_e_operadores.ipynb)
+
 ## Editores de código
 
 * entrada e saída de dados
 * métodos e funções
-  * importação de modulos e métodos
-  * funções definidas pelo usuário
+    * importação de modulos e métodos
+    * funções definidas pelo usuário
 
 [Exrcício Baskara](./Bhaskara.pdf)
 
@@ -31,16 +33,16 @@
 
 * Repetições
 
-  * while
-  * for
-  * recursividade
+    * while
+    * for
+    * recursividade
 
 
 * Condicionais lógicas
 
-  * if
-  * else
-  * elif
+    * if
+    * else
+    * elif
 
 
 
