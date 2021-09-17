@@ -44,6 +44,14 @@
     * for
     * recursividade
 
+## Variáveis compostas pt.2
 
+* set
+* dictionary
+
+## Trabalhando com arquivos
+
+* Ler arquivo texto
+* escrever arquivo texto
 
 
