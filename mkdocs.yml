@@ -66,9 +66,8 @@ extra_css:
 
 plugins:
   - mkdocs-jupyter:
-    include_source: True
-
-
+      #execute: True
+      include_source: True
 
 
 extra:
