@@ -27,6 +27,7 @@ mkdocs = "^1.2.1"
 mkdocs-material = "^7.1.9"
 mkdocs-jupyter = "^0.17.3"
 Flowgiston = "^0.1"
+mknotebooks = "^0.7.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

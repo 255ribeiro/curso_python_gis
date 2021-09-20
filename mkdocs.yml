@@ -65,7 +65,10 @@ extra_css:
   - overrides/css/extra_css.css
 
 plugins:
-  - mkdocs-jupyter
+  - mkdocs-jupyter:
+    include_source: True
+
+
 
 
 extra:
