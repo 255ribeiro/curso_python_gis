@@ -43,11 +43,11 @@ nav:
       - Jupyter notebooks: cientif_py\jupyter_intro.ipynb
       - numpy: cientif_py\numpy_intro.ipynb
       - matplotlib: cientif_py\matplotlib_intro.ipynb
-      - scipy: cientif_py\numpy_intro.ipynb
+      - scipy: cientif_py\scipy_intro.ipynb
 
 
   - Manipulação de dados:
-      - pandas: dados_py/pandas.md
+      - pandas: dados_py/pandas_intro.ipynb
   - Dados geoespaciais:
     - Geopandas: geo_py/geopandas.md
     - Google Earth Engine: geo_py/geemap.md
