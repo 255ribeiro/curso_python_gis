@@ -11,4 +11,11 @@
 
 
 ## Link do notebook
+
+### Ver notebook
+
+[Notebbok](./Teste_geopandas_ibge_censo_2022_v2.ipynb)
+
+### Link do Github
+
 [https://github.com/255ribeiro/curso_python_gis/blob/master/docs/geo_py/Teste_geopandas_ibge_censo_2022_v2.ipynb](https://github.com/255ribeiro/curso_python_gis/blob/master/docs/geo_py/Teste_geopandas_ibge_censo_2022_v2.ipynb)
