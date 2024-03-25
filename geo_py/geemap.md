@@ -1,4 +1,4 @@
 # Google Earth Engine
 
-[notebook](geemap_intro.ipynb)
+[notebook](./geemap_intro.ipynb)
 
