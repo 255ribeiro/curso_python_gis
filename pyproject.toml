@@ -14,6 +14,13 @@ statsmodels = "^0.14.1"
 qtconsole = "^5.5.1"
 geemap = "^0.32.0"
 scipy = "^1.12.0"
+shapely = "^2.0.3"
+mapclassify = "^2.6.1"
+libpysal = "^4.10"
+splot = "^1.1.5.post1"
+esda = "^2.5.1"
+pysal = "^24.1"
+contextily = "^1.6.0"
 
 [tool.poetry.group.dev.dependencies]
 mkdocs = "^1.5.3"

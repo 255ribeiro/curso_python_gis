@@ -70,13 +70,13 @@ plugins:
       include_source: True
 
 
-extra:
-  social:
-      - icon: fontawesome/brands/github
-        link: https://github.com/255ribeiro
-      - icon: fontawesome/brands/youtube
-        link: https://www.youtube.com/channel/UCCkMaRdD7PBWhs4JgH5s6_w
-      - icon: fontawesome/brands/linkedin
-        link: https://www.linkedin.com/in/fernando-ferraz-ribeiro-b49a7bb0/
-      - icon: fontawesome/solid/envelope-square
-        link: mailto:ffribeiro@gmail.com
+# extra:
+#   social:
+#       - icon: fontawesome/brands/github
+#         link: https://github.com/255ribeiro
+#       - icon: fontawesome/brands/youtube
+#         link: https://www.youtube.com/channel/UCCkMaRdD7PBWhs4JgH5s6_w
+#       - icon: fontawesome/brands/linkedin
+#         link: https://www.linkedin.com/in/fernando-ferraz-ribeiro-b49a7bb0/
+#       - icon: fontawesome/solid/envelope-square
+#         link: mailto:ffribeiro@gmail.com
