@@ -19,3 +19,9 @@
 ### Link do Github
 
 [https://github.com/255ribeiro/curso_python_gis/blob/master/docs/geo_py/Teste_geopandas_ibge_censo_2022_v2.ipynb](https://github.com/255ribeiro/curso_python_gis/blob/master/docs/geo_py/Teste_geopandas_ibge_censo_2022_v2.ipynb)
+
+
+
+[Bairros de Salvador - shapefile - 2017](./Bairros_salvador_2017/LIMITE_BAIRRO.zip)
+
+[Bairros de Salvador - diário oficial - 2017](./Bairros_salvador_2017/dom-6931-21-09-2017_bairros.pdf)
