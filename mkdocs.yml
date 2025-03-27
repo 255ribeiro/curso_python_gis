@@ -51,9 +51,9 @@ nav:
       - pandas notebook: dados_py\pandas_intro.ipynb
   
   
-  - Dados geoespaciais:
+  - Manipulação de dados geoespaciais:
     - Geopandas: geo_py\geopandas.md
-    - Geopandas notebook: geo_py/Teste_geopandas_ibge_censo_2022_v2.ipynb
+    - Notebook: geo_py/Teste_geopandas_ibge_censo_2022_v2.ipynb
     - Google Earth Engine: geo_py\geemap.md
   - Referências: ref\ref.md
 
