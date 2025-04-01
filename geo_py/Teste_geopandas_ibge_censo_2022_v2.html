@@ -3660,7 +3660,7 @@ df_geo["v0007"] = df_geo["v0007"].astype(int)
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-16">
@@ -3674,10 +3674,10 @@ df_geo["v0007"] = df_geo["v0007"].astype(int)
 </clipboard-copy>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># criado novas colunas</span>
-<span class="n">df_geo</span><span class="p">[</span><span class="s2">"desnidade_pop"</span><span class="p">]</span> <span class="o">=</span>  <span class="n">df_geo</span><span class="p">[</span><span class="s2">"v0001"</span><span class="p">]</span><span class="o">/</span><span class="n">df_geo</span><span class="p">[</span><span class="s2">"AREA_KM2"</span><span class="p">]</span>
+<span class="n">df_geo</span><span class="p">[</span><span class="s2">"densidade_pop"</span><span class="p">]</span> <span class="o">=</span>  <span class="n">df_geo</span><span class="p">[</span><span class="s2">"v0001"</span><span class="p">]</span><span class="o">/</span><span class="n">df_geo</span><span class="p">[</span><span class="s2">"AREA_KM2"</span><span class="p">]</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-16"># criado novas colunas
-df_geo["desnidade_pop"] =  df_geo["v0001"]/df_geo["AREA_KM2"]</div>
+df_geo["densidade_pop"] =  df_geo["v0001"]/df_geo["AREA_KM2"]</div>
 </div>
 </div>
 </div>
@@ -4161,7 +4161,7 @@ memory usage: 7.2+ MB
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-19">
@@ -4176,19 +4176,19 @@ memory usage: 7.2+ MB
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 
-<span class="n">ax</span> <span class="o">=</span> <span class="n">df_geo</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s2">"desnidade_pop"</span><span class="p">,</span>
-                <span class="c1">#  scheme="quantiles",</span>
+<span class="n">df_geo</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s2">"densidade_pop"</span><span class="p">,</span>
+            <span class="c1">#  scheme="quantiles",</span>
 
-                 <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Habitantes por km²"</span><span class="p">}</span>
-                 <span class="p">)</span>
+            <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Habitantes por km²"</span><span class="p">}</span>
+            <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-19">fig, ax = plt.subplots(figsize=(10,10))
 
-ax = df_geo.plot(ax=ax, column = "desnidade_pop",
-                #  scheme="quantiles",
+df_geo.plot(ax=ax, column = "densidade_pop",
+            #  scheme="quantiles",
 
-                 legend_kwds={"title": "Habitantes por km²"}
-                 )
+            legend_kwds={"title": "Habitantes por km²"}
+            )
 </div>
 </div>
 </div>
@@ -4225,7 +4225,7 @@ ax = df_geo.plot(ax=ax, column = "desnidade_pop",
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-20">
@@ -4240,21 +4240,21 @@ ax = df_geo.plot(ax=ax, column = "desnidade_pop",
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 
-<span class="n">ax</span> <span class="o">=</span> <span class="n">df_geo</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s2">"desnidade_pop"</span><span class="p">,</span>
-                 <span class="n">scheme</span><span class="o">=</span><span class="s2">"quantiles"</span><span class="p">,</span>
-                 <span class="n">cmap</span><span class="o">=</span><span class="s1">'viridis'</span><span class="p">,</span>
-                 <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Habitantes por km²"</span><span class="p">}</span>
-                 <span class="p">)</span>
+<span class="n">df_geo</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s2">"densidade_pop"</span><span class="p">,</span>
+            <span class="n">scheme</span><span class="o">=</span><span class="s2">"quantiles"</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s1">'viridis'</span><span class="p">,</span>
+            <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Habitantes por km²"</span><span class="p">}</span>
+            <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-20">fig, ax = plt.subplots(figsize=(10,10))
 
-ax = df_geo.plot(ax=ax, column = "desnidade_pop",
-                 scheme="quantiles",
-                 cmap='viridis',
-                 legend=True,
-                 legend_kwds={"title": "Habitantes por km²"}
-                 )
+df_geo.plot(ax=ax, column = "densidade_pop",
+            scheme="quantiles",
+            cmap='viridis',
+            legend=True,
+            legend_kwds={"title": "Habitantes por km²"}
+            )
 </div>
 </div>
 </div>
@@ -4290,7 +4290,7 @@ ax = df_geo.plot(ax=ax, column = "desnidade_pop",
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-21">
@@ -4311,12 +4311,12 @@ ax = df_geo.plot(ax=ax, column = "desnidade_pop",
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 
-<span class="n">ax</span> <span class="o">=</span> <span class="n">df_geo</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s2">"desnidade_pop"</span><span class="p">,</span>
-                 <span class="n">scheme</span><span class="o">=</span><span class="s2">"quantiles"</span><span class="p">,</span>
-                 <span class="n">cmap</span><span class="o">=</span><span class="n">c_map</span><span class="p">,</span>
-                 <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Habitantes por km²"</span><span class="p">}</span>
-                 <span class="p">)</span>
+<span class="n">df_geo</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s2">"densidade_pop"</span><span class="p">,</span>
+             <span class="n">scheme</span><span class="o">=</span><span class="s2">"quantiles"</span><span class="p">,</span>
+             <span class="n">cmap</span><span class="o">=</span><span class="n">c_map</span><span class="p">,</span>
+             <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Habitantes por km²"</span><span class="p">}</span>
+             <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-21">from matplotlib import colors as mcolors
 
@@ -4326,12 +4326,12 @@ c_map = mcolors.ListedColormap(c_list)
 
 fig, ax = plt.subplots(figsize=(10,10))
 
-ax = df_geo.plot(ax=ax, column = "desnidade_pop",
-                 scheme="quantiles",
-                 cmap=c_map,
-                 legend=True,
-                 legend_kwds={"title": "Habitantes por km²"}
-                 )
+df_geo.plot(ax=ax, column = "densidade_pop",
+             scheme="quantiles",
+             cmap=c_map,
+             legend=True,
+             legend_kwds={"title": "Habitantes por km²"}
+             )
 </div>
 </div>
 </div>
@@ -4368,7 +4368,7 @@ ax = df_geo.plot(ax=ax, column = "desnidade_pop",
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-22">
@@ -4390,12 +4390,12 @@ ax = df_geo.plot(ax=ax, column = "desnidade_pop",
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 
-<span class="n">ax</span> <span class="o">=</span> <span class="n">df_geo</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s2">"desnidade_pop"</span><span class="p">,</span>
-                 <span class="n">scheme</span><span class="o">=</span><span class="s2">"quantiles"</span><span class="p">,</span>
-                 <span class="n">cmap</span><span class="o">=</span><span class="n">c_map</span><span class="p">,</span>
-                 <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Habitantes por km²"</span><span class="p">}</span>
-                 <span class="p">)</span>
+<span class="n">df_geo</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s2">"densidade_pop"</span><span class="p">,</span>
+             <span class="n">scheme</span><span class="o">=</span><span class="s2">"quantiles"</span><span class="p">,</span>
+             <span class="n">cmap</span><span class="o">=</span><span class="n">c_map</span><span class="p">,</span>
+             <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Habitantes por km²"</span><span class="p">}</span>
+             <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-22">c_list = ["#271f30","#6c5a49","#c8ad55","#9bc59d","#d0fcb3"]
 
@@ -4406,12 +4406,12 @@ c_map = mcolors.ListedColormap(c_list)
 
 fig, ax = plt.subplots(figsize=(10,10))
 
-ax = df_geo.plot(ax=ax, column = "desnidade_pop",
-                 scheme="quantiles",
-                 cmap=c_map,
-                 legend=True,
-                 legend_kwds={"title": "Habitantes por km²"}
-                 )</div>
+df_geo.plot(ax=ax, column = "densidade_pop",
+             scheme="quantiles",
+             cmap=c_map,
+             legend=True,
+             legend_kwds={"title": "Habitantes por km²"}
+             )</div>
 </div>
 </div>
 </div>
@@ -22497,11 +22497,11 @@ ul.xyz-collapsible {
 </clipboard-copy>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">df_2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"v0001"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'flare'</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
+<span class="n">df_2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"densidade_pop"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'flare'</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
 <span class="n">cx</span><span class="o">.</span><span class="n">add_basemap</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">cx</span><span class="o">.</span><span class="n">providers</span><span class="o">.</span><span class="n">CartoDB</span><span class="o">.</span><span class="n">Voyager</span> <span class="p">,</span>  <span class="n">crs</span><span class="o">=</span><span class="n">df_2</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-42">fig, ax = plt.subplots(1, figsize=(10,10))
-df_2.plot(ax = ax, column="v0001", cmap='flare',legend=True )
+df_2.plot(ax = ax, column="densidade_pop", cmap='flare',legend=True )
 cx.add_basemap(ax=ax, source=cx.providers.CartoDB.Voyager ,  crs=df_2.crs)</div>
 </div>
 </div>
@@ -22526,7 +22526,7 @@ cx.add_basemap(ax=ax, source=cx.providers.CartoDB.Voyager ,  crs=df_2.crs)</div>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [35]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy for="cell-43">
@@ -22541,7 +22541,7 @@ cx.add_basemap(ax=ax, source=cx.providers.CartoDB.Voyager ,  crs=df_2.crs)</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">.5</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">df_2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"v0001"</span><span class="p">,</span>
+<span class="n">df_2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"densidade_pop"</span><span class="p">,</span>
           <span class="n">cmap</span><span class="o">=</span><span class="s1">'OrRd'</span><span class="p">,</span>
           <span class="n">scheme</span> <span class="o">=</span> <span class="s2">"quantiles"</span><span class="p">,</span>
           <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -22553,7 +22553,7 @@ cx.add_basemap(ax=ax, source=cx.providers.CartoDB.Voyager ,  crs=df_2.crs)</div>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-43">alpha = .5
 fig, ax = plt.subplots(1, figsize=(10,10))
-df_2.plot(ax = ax, column="v0001",
+df_2.plot(ax = ax, column="densidade_pop",
           cmap='OrRd',
           scheme = "quantiles",
           legend=True,
@@ -22869,13 +22869,13 @@ pt_terreno = Point(lon, lat)</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 
-<span class="n">df_2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Oranges"</span><span class="p">)</span>
+<span class="n">df_2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span> <span class="s1">'densidade_pop'</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Oranges"</span><span class="p">)</span>
 <span class="n">loc_terreno</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-48">fig, ax = plt.subplots()
 
-df_2.plot(ax=ax, cmap="Oranges")
+df_2.plot(ax=ax, column= 'densidade_pop', cmap="Oranges")
 loc_terreno.plot(ax=ax)
 plt.xticks(rotation=90)</div>
 </div>
@@ -22959,16 +22959,16 @@ plt.xticks(rotation=90)</div>
 </clipboard-copy>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">.2</span><span class="p">)</span>
-<span class="n">df_2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Oranges"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">.2</span><span class="p">)</span> <span class="c1"># monstra grid no gráfico</span>
+<span class="n">df_2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span> <span class="s1">'densidade_pop'</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Oranges"</span><span class="p">)</span>
 <span class="n">entorno</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-50">fig, ax = plt.subplots()
-plt.grid(alpha = .2)
-df_2.plot(ax=ax, cmap="Oranges")
+plt.grid(alpha = .2) # monstra grid no gráfico
+df_2.plot(ax=ax, columns= 'densidade_pop' cmap="Oranges")
 entorno.plot(ax=ax)
 
 plt.xticks(rotation=90)
@@ -23051,21 +23051,23 @@ df_4 = df_2[fltr]</div>
 </clipboard-copy>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-<span class="n">df_4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Oranges"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">"Entorno do Terreno"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">df_4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">column</span><span class="o">=</span> <span class="s2">"densidade_pop"</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Oranges"</span><span class="p">)</span>
 <span class="n">loc_terreno</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'o'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'teal'</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">"Terreno"</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span> <span class="p">(</span><span class="n">loc_terreno</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">loc_terreno</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">"offset points"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">"Terreno"</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span> <span class="p">(</span><span class="n">loc_terreno</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">loc_terreno</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">"offset points"</span><span class="p">)</span> <span class="c1"># escreve o nome do terreno</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">'plain'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">'plain'</span><span class="p">)</span> <span class="c1"># remove notação científica</span>
 <span class="c1">#salvando figura</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'./entorno.svg'</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-52">fig, ax = plt.subplots()
-df_4.plot(ax=ax, cmap="Oranges")
+fig.suptitle("Entorno do Terreno", fontsize=20)
+df_4.plot(ax=ax,column= "densidade_pop" cmap="Oranges")
 loc_terreno.plot(ax=ax, marker='o', color='teal', markersize=100)
-ax.annotate("Terreno", xy= (loc_terreno.geometry.x, loc_terreno.geometry.y), xytext=(3, 3), textcoords="offset points")
+ax.annotate("Terreno", xy= (loc_terreno.geometry.x, loc_terreno.geometry.y), xytext=(3, 3), textcoords="offset points") # escreve o nome do terreno
 plt.xticks(rotation=90)
-ax.ticklabel_format(style='plain')
+ax.ticklabel_format(style='plain') # remove notação científica
 #salvando figura
 fig.savefig('./entorno.svg')
 fig.show()</div>
