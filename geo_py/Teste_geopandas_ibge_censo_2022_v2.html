@@ -22901,6 +22901,17 @@ plt.xticks(rotation=90)</div>
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Criando uma região de 1km (1000m) ao redor do ponto do terreno</p>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -22925,6 +22936,17 @@ plt.xticks(rotation=90)</div>
 <div class="clipboard-copy-txt" id="cell-49">entorno = loc_terreno.buffer(1000)</div>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Mostrando a feição do entorno</p>
 </div>
 </div>
 </div>
@@ -22991,6 +23013,17 @@ fig.show()</div>
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Criando um geodataframe apenas com os setores censitários que tem alguma intercessão com a feição de entorno.</p>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -23017,6 +23050,17 @@ fig.show()</div>
 df_4 = df_2[fltr]</div>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Plotando um gráfico apenas com os setores censitários que fazem intercessão com o entrorno</p>
 </div>
 </div>
 </div>
@@ -23048,9 +23092,9 @@ df_4 = df_2[fltr]</div>
           <span class="p">)</span>
 <span class="c1"># plotagem da localização do terreno</span>
 <span class="n">loc_terreno</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                 <span class="n">marker</span><span class="o">=</span><span class="s1">'o'</span><span class="p">,</span> <span class="c1"># tipo de marcador</span>
-                 <span class="n">color</span><span class="o">=</span><span class="s1">'teal'</span><span class="p">,</span> <span class="c1"># cor do marcador</span>
-                 <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span> <span class="c1"># tamanho do marcador</span>
+                 <span class="n">marker</span><span class="o">=</span> <span class="s1">'o'</span><span class="p">,</span> <span class="c1"># tipo de marcador</span>
+                 <span class="n">color</span><span class="o">=</span> <span class="s1">'teal'</span><span class="p">,</span> <span class="c1"># cor do marcador</span>
+                 <span class="n">markersize</span><span class="o">=</span> <span class="mi">100</span> <span class="c1"># tamanho do marcador</span>
                  <span class="p">)</span>
 <span class="c1"># escreve texto no ponto do terreno</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">"Terreno"</span><span class="p">,</span> <span class="c1"># Texto à escrever</span>
@@ -23073,9 +23117,9 @@ df_4.plot(ax=ax,
           )
 # plotagem da localização do terreno
 loc_terreno.plot(ax=ax,
-                 marker='o', # tipo de marcador
-                 color='teal', # cor do marcador
-                 markersize=100 # tamanho do marcador
+                 marker= 'o', # tipo de marcador
+                 color= 'teal', # cor do marcador
+                 markersize= 100 # tamanho do marcador
                  )
 # escreve texto no ponto do terreno
 ax.annotate("Terreno", # Texto à escrever
