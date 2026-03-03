@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Arquivos — Estrutura em Árvore</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f0e8;
+  --paper: #fdfaf4;
+  --ink: #1a1209;
+  --muted: #7c6e57;
+  --root: #b5390a;
+  --dir: #2563a8;
+  --file: #16613a;
+  --sys: #7c3aad;
+  --link: #b45309;
+  --line: #c8b89a;
+  --accent: #e8d5b0;
+  --shadow: rgba(26,18,9,0.08);
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Outfit', sans-serif;
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 50px 30px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Paper texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1080px;
+}
+
+/* HEADER */
+header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+  gap: 20px;
+  animation: fadeIn 0.6s ease both;
+}
+
+.header-left .eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--root);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.header-left h1 {
+  font-size: clamp(26px, 4vw, 46px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: var(--ink);
+}
+
+.header-left h1 span {
+  color: var(--root);
+}
+
+.header-left p {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 300;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* LEGEND BOX */
+.legend-box {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  box-shadow: 4px 4px 0 var(--line);
+}
+
+.legend-box .legend-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+
+.legend-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* MAIN TREE LAYOUT */
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 30px;
+  align-items: start;
+  animation: fadeIn 0.7s ease 0.2s both;
+}
+
+/* TREE PANEL */
+.tree-panel {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 6px 6px 0 var(--line);
+}
+
+.tree-toolbar {
+  background: var(--accent);
+  border-bottom: 1.5px solid var(--line);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbar-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+}
+.dot-r { background: #e05252; }
+.dot-y { background: #e0a832; }
+.dot-g { background: #52c452; }
+
+.toolbar-path {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 6px;
+}
+
+.tree-body {
+  padding: 24px 28px;
+  overflow-x: auto;
+}
+
+/* TREE NODES */
+.tree-node {
+  position: relative;
+  animation: slideIn 0.5s ease both;
+}
+
+.node-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 7px;
+  cursor: default;
+  transition: background 0.15s;
+  white-space: nowrap;
+  position: relative;
+}
+
+.node-row:hover { background: var(--accent); }
+
+.node-icon {
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.node-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.node-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-left: 4px;
+}
+
+.node-size {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: auto;
+  padding-left: 16px;
+}
+
+/* Type colors */
+.type-root .node-name { color: var(--root); font-weight: 700; font-size: 15px; }
+.type-root .node-badge { background: rgba(181,57,10,0.1); color: var(--root); }
+
+.type-dir .node-name { color: var(--dir); font-weight: 600; }
+.type-dir .node-badge { background: rgba(37,99,168,0.1); color: var(--dir); }
+
+.type-file .node-name { color: var(--file); }
+.type-file .node-badge { background: rgba(22,97,58,0.1); color: var(--file); }
+
+.type-sys .node-name { color: var(--sys); font-weight: 600; }
+.type-sys .node-badge { background: rgba(124,58,173,0.1); color: var(--sys); }
+
+.type-link .node-name { color: var(--link); font-style: italic; }
+.type-link .node-badge { background: rgba(180,83,9,0.1); color: var(--link); }
+
+/* Tree lines using borders */
+.children {
+  margin-left: 20px;
+  padding-left: 18px;
+  border-left: 2px dashed var(--line);
+  position: relative;
+}
+
+.tree-node:not(:last-child) .children {
+  /* keep solid dashes */
+}
+
+.connector {
+  display: flex;
+  align-items: center;
+  height: 0;
+  position: relative;
+}
+
+/* Horizontal connector line */
+.node-row::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  width: 18px;
+  height: 2px;
+  background: var(--line);
+  border-radius: 1px;
+}
+
+.node-row.is-root::before { display: none; }
+
+/* ---- RIGHT PANEL ---- */
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* CONCEPTS CARD */
+.concept-card {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 4px 4px 0 var(--line);
+}
+
+.concept-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.concept-header h3 {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.concept-body {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.concept-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.concept-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--accent);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.concept-text h4 {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  color: var(--ink);
+}
+
+.concept-text p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* PATH CARD */
+.path-card {
+  background: var(--ink);
+  border-radius: 14px;
+  padding: 20px;
+  color: #e8d5b0;
+  box-shadow: 4px 4px 0 rgba(26,18,9,0.25);
+}
+
+.path-card h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--root);
+  margin-bottom: 14px;
+}
+
+.path-example {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.path-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.path-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: #7c6e57;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.path-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #52c452;
+  background: rgba(255,255,255,0.05);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.path-value .sep { color: var(--root); }
+.path-value .dir-p { color: #60a5fa; }
+.path-value .file-p { color: #86efac; }
+.path-value .tilde { color: #fbbf24; }
+
+/* STATS CARD */
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stat-box {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 3px 3px 0 var(--line);
+}
+
+.stat-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* FOOTER */
+footer {
+  margin-top: 40px;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  animation: fadeIn 1s ease 1s both;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Stagger tree nodes */
+.tree-node:nth-child(1) { animation-delay: 0.1s; }
+.tree-node:nth-child(2) { animation-delay: 0.15s; }
+.tree-node:nth-child(3) { animation-delay: 0.2s; }
+.tree-node:nth-child(4) { animation-delay: 0.25s; }
+.tree-node:nth-child(5) { animation-delay: 0.3s; }
+.tree-node:nth-child(6) { animation-delay: 0.35s; }
+
+/* RESPONSIVE */
+@media (max-width: 780px) {
+  .main-layout { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="header-left">
+      <div class="eyebrow">Sistemas Operacionais · Organização de Dados</div>
+      <h1>Estrutura em <span>Árvore</span><br>do Sistema de Arquivos</h1>
+      <p>Hierarquia de diretórios e arquivos em sistemas Unix/Linux, partindo do diretório raiz <strong>/</strong> até os arquivos individuais.</p>
+    </div>
+
+    <div class="legend-box">
+      <div class="legend-title">Legenda</div>
+      <div class="legend-item">
+        <div class="legend-icon" style="background:rgba(181,57,10,0.1); font-size:15px;">🌳</div>
+        <span style="color:var(--root)">Raiz (root /)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-icon" style="background:rgba(37,99,168,0.1); font-size:15px;">📁</div>
+        <span style="color:var(--dir)">Diretório</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-icon" style="background:rgba(22,97,58,0.1); font-size:15px;">📄</div>
+        <span style="color:var(--file)">Arquivo</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-icon" style="background:rgba(124,58,173,0.1); font-size:15px;">⚙️</div>
+        <span style="color:var(--sys)">Diretório do Sistema</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-icon" style="background:rgba(180,83,9,0.1); font-size:15px;">🔗</div>
+        <span style="color:var(--link)">Link Simbólico</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-layout">
+
+    <!-- TREE PANEL -->
+    <div class="tree-panel">
+      <div class="tree-toolbar">
+        <div class="toolbar-dots">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+        </div>
+        <span class="toolbar-path">explorador de arquivos — /</span>
+      </div>
+      <div class="tree-body">
+
+        <!-- ROOT -->
+        <div class="tree-node">
+          <div class="node-row is-root type-root">
+            <span class="node-icon">🌳</span>
+            <span class="node-name">/</span>
+            <span class="node-badge">raiz</span>
+          </div>
+
+          <div class="children">
+
+            <!-- /bin -->
+            <div class="tree-node">
+              <div class="node-row type-sys">
+                <span class="node-icon">⚙️</span>
+                <span class="node-name">bin</span>
+                <span class="node-badge">sistema</span>
+                <span class="node-size">binários essenciais</span>
+              </div>
+              <div class="children">
+                <div class="tree-node">
+                  <div class="node-row type-file">
+                    <span class="node-icon">📄</span>
+                    <span class="node-name">ls</span>
+                    <span class="node-size">executável</span>
+                  </div>
+                </div>
+                <div class="tree-node">
+                  <div class="node-row type-file">
+                    <span class="node-icon">📄</span>
+                    <span class="node-name">cp</span>
+                    <span class="node-size">executável</span>
+                  </div>
+                </div>
+                <div class="tree-node">
+                  <div class="node-row type-file">
+                    <span class="node-icon">📄</span>
+                    <span class="node-name">bash</span>
+                    <span class="node-size">executável</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- /etc -->
+            <div class="tree-node">
+              <div class="node-row type-sys">
+                <span class="node-icon">⚙️</span>
+                <span class="node-name">etc</span>
+                <span class="node-badge">sistema</span>
+                <span class="node-size">configurações globais</span>
+              </div>
+              <div class="children">
+                <div class="tree-node">
+                  <div class="node-row type-file">
+                    <span class="node-icon">📄</span>
+                    <span class="node-name">passwd</span>
+                    <span class="node-size">1.8 KB</span>
+                  </div>
+                </div>
+                <div class="tree-node">
+                  <div class="node-row type-file">
+                    <span class="node-icon">📄</span>
+                    <span class="node-name">hosts</span>
+                    <span class="node-size">221 B</span>
+                  </div>
+                </div>
+                <div class="tree-node">
+                  <div class="node-row type-dir">
+                    <span class="node-icon">📁</span>
+                    <span class="node-name">network</span>
+                    <span class="node-badge">dir</span>
+                  </div>
+                  <div class="children">
+                    <div class="tree-node">
+                      <div class="node-row type-file">
+                        <span class="node-icon">📄</span>
+                        <span class="node-name">interfaces</span>
+                        <span class="node-size">512 B</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- /home -->
+            <div class="tree-node">
+              <div class="node-row type-dir">
+                <span class="node-icon">📁</span>
+                <span class="node-name">home</span>
+                <span class="node-badge">dir</span>
+                <span class="node-size">usuários do sistema</span>
+              </div>
+              <div class="children">
+
+                <!-- /home/alice -->
+                <div class="tree-node">
+                  <div class="node-row type-dir">
+                    <span class="node-icon">📁</span>
+                    <span class="node-name">alice</span>
+                    <span class="node-badge">usuário</span>
+                  </div>
+                  <div class="children">
+                    <div class="tree-node">
+                      <div class="node-row type-dir">
+                        <span class="node-icon">📁</span>
+                        <span class="node-name">Documentos</span>
+                        <span class="node-badge">dir</span>
+                      </div>
+                      <div class="children">
+                        <div class="tree-node">
+                          <div class="node-row type-file">
+                            <span class="node-icon">📄</span>
+                            <span class="node-name">relatorio.pdf</span>
+                            <span class="node-size">2.4 MB</span>
+                          </div>
+                        </div>
+                        <div class="tree-node">
+                          <div class="node-row type-file">
+                            <span class="node-icon">📄</span>
+                            <span class="node-name">notas.txt</span>
+                            <span class="node-size">4.1 KB</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tree-node">
+                      <div class="node-row type-dir">
+                        <span class="node-icon">📁</span>
+                        <span class="node-name">Imagens</span>
+                        <span class="node-badge">dir</span>
+                      </div>
+                      <div class="children">
+                        <div class="tree-node">
+                          <div class="node-row type-file">
+                            <span class="node-icon">📄</span>
+                            <span class="node-name">foto.jpg</span>
+                            <span class="node-size">3.2 MB</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tree-node">
+                      <div class="node-row type-link">
+                        <span class="node-icon">🔗</span>
+                        <span class="node-name">compartilhado → /home/bob/publico</span>
+                        <span class="node-size">link</span>
+                      </div>
+                    </div>
+                    <div class="tree-node">
+                      <div class="node-row type-file">
+                        <span class="node-icon">📄</span>
+                        <span class="node-name">.bashrc</span>
+                        <span class="node-size">oculto</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- /home/bob -->
+                <div class="tree-node">
+                  <div class="node-row type-dir">
+                    <span class="node-icon">📁</span>
+                    <span class="node-name">bob</span>
+                    <span class="node-badge">usuário</span>
+                  </div>
+                  <div class="children">
+                    <div class="tree-node">
+                      <div class="node-row type-dir">
+                        <span class="node-icon">📁</span>
+                        <span class="node-name">publico</span>
+                        <span class="node-badge">dir</span>
+                      </div>
+                      <div class="children">
+                        <div class="tree-node">
+                          <div class="node-row type-file">
+                            <span class="node-icon">📄</span>
+                            <span class="node-name">readme.md</span>
+                            <span class="node-size">1.1 KB</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tree-node">
+                      <div class="node-row type-dir">
+                        <span class="node-icon">📁</span>
+                        <span class="node-name">Projetos</span>
+                        <span class="node-badge">dir</span>
+                      </div>
+                      <div class="children">
+                        <div class="tree-node">
+                          <div class="node-row type-file">
+                            <span class="node-icon">📄</span>
+                            <span class="node-name">main.c</span>
+                            <span class="node-size">8.3 KB</span>
+                          </div>
+                        </div>
+                        <div class="tree-node">
+                          <div class="node-row type-file">
+                            <span class="node-icon">📄</span>
+                            <span class="node-name">Makefile</span>
+                            <span class="node-size">512 B</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- /var -->
+            <div class="tree-node">
+              <div class="node-row type-sys">
+                <span class="node-icon">⚙️</span>
+                <span class="node-name">var</span>
+                <span class="node-badge">sistema</span>
+                <span class="node-size">dados variáveis / logs</span>
+              </div>
+              <div class="children">
+                <div class="tree-node">
+                  <div class="node-row type-dir">
+                    <span class="node-icon">📁</span>
+                    <span class="node-name">log</span>
+                    <span class="node-badge">dir</span>
+                  </div>
+                  <div class="children">
+                    <div class="tree-node">
+                      <div class="node-row type-file">
+                        <span class="node-icon">📄</span>
+                        <span class="node-name">syslog</span>
+                        <span class="node-size">14 MB</span>
+                      </div>
+                    </div>
+                    <div class="tree-node">
+                      <div class="node-row type-file">
+                        <span class="node-icon">📄</span>
+                        <span class="node-name">auth.log</span>
+                        <span class="node-size">2.1 MB</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- /tmp -->
+            <div class="tree-node">
+              <div class="node-row type-sys">
+                <span class="node-icon">⚙️</span>
+                <span class="node-name">tmp</span>
+                <span class="node-badge">sistema</span>
+                <span class="node-size">temporário · limpo ao reiniciar</span>
+              </div>
+              <div class="children">
+                <div class="tree-node">
+                  <div class="node-row type-file">
+                    <span class="node-icon">📄</span>
+                    <span class="node-name">sess_a3f9.tmp</span>
+                    <span class="node-size">48 B</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- /usr -->
+            <div class="tree-node">
+              <div class="node-row type-sys">
+                <span class="node-icon">⚙️</span>
+                <span class="node-name">usr</span>
+                <span class="node-badge">sistema</span>
+                <span class="node-size">programas de usuário</span>
+              </div>
+              <div class="children">
+                <div class="tree-node">
+                  <div class="node-row type-dir">
+                    <span class="node-icon">📁</span>
+                    <span class="node-name">local</span>
+                    <span class="node-badge">dir</span>
+                  </div>
+                  <div class="children">
+                    <div class="tree-node">
+                      <div class="node-row type-dir">
+                        <span class="node-icon">📁</span>
+                        <span class="node-name">bin</span>
+                        <span class="node-badge">dir</span>
+                      </div>
+                    </div>
+                    <div class="tree-node">
+                      <div class="node-row type-dir">
+                        <span class="node-icon">📁</span>
+                        <span class="node-name">lib</span>
+                        <span class="node-badge">dir</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /children root -->
+        </div><!-- /root node -->
+
+      </div><!-- /tree-body -->
+    </div><!-- /tree-panel -->
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-number" style="color:var(--root)">1</div>
+          <div class="stat-label">Raiz</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" style="color:var(--dir)">16</div>
+          <div class="stat-label">Diretórios</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" style="color:var(--file)">14</div>
+          <div class="stat-label">Arquivos</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" style="color:var(--link)">1</div>
+          <div class="stat-label">Links</div>
+        </div>
+      </div>
+
+      <!-- PATH EXAMPLES -->
+      <div class="path-card">
+        <h3>Caminhos absolutos e relativos</h3>
+        <div class="path-example">
+          <div class="path-row">
+            <span class="path-label">Absoluto</span>
+            <span class="path-value">
+              <span class="sep">/</span><span class="dir-p">home</span><span class="sep">/</span><span class="dir-p">alice</span><span class="sep">/</span><span class="dir-p">Documentos</span><span class="sep">/</span><span class="file-p">relatorio.pdf</span>
+            </span>
+          </div>
+          <div class="path-row">
+            <span class="path-label">Relativo (a partir de alice)</span>
+            <span class="path-value">
+              <span class="dir-p">Documentos</span><span class="sep">/</span><span class="file-p">relatorio.pdf</span>
+            </span>
+          </div>
+          <div class="path-row">
+            <span class="path-label">Atalho home (~)</span>
+            <span class="path-value">
+              <span class="tilde">~</span><span class="sep">/</span><span class="dir-p">Documentos</span><span class="sep">/</span><span class="file-p">notas.txt</span>
+            </span>
+          </div>
+          <div class="path-row">
+            <span class="path-label">Subir nível (../)</span>
+            <span class="path-value">
+              <span class="sep">../</span><span class="dir-p">bob</span><span class="sep">/</span><span class="dir-p">publico</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONCEPTS -->
+      <div class="concept-card">
+        <div class="concept-header">
+          <span style="font-size:16px">📚</span>
+          <h3>Conceitos Essenciais</h3>
+        </div>
+        <div class="concept-body">
+          <div class="concept-item">
+            <div class="concept-num">01</div>
+            <div class="concept-text">
+              <h4>Nó Raiz ( / )</h4>
+              <p>Ponto de partida único da hierarquia. Todo caminho começa aqui. Sem diretório pai.</p>
+            </div>
+          </div>
+          <div class="concept-item">
+            <div class="concept-num">02</div>
+            <div class="concept-text">
+              <h4>Diretório (nó interno)</h4>
+              <p>Contém outros diretórios ou arquivos. Tem exatamente um pai (exceto a raiz).</p>
+            </div>
+          </div>
+          <div class="concept-item">
+            <div class="concept-num">03</div>
+            <div class="concept-text">
+              <h4>Arquivo (nó folha)</h4>
+              <p>Unidade de dados. Não tem filhos. Identificado por nome + extensão.</p>
+            </div>
+          </div>
+          <div class="concept-item">
+            <div class="concept-num">04</div>
+            <div class="concept-text">
+              <h4>Link Simbólico</h4>
+              <p>Atalho que aponta para outro arquivo ou diretório, podendo cruzar sistemas.</p>
+            </div>
+          </div>
+          <div class="concept-item">
+            <div class="concept-num">05</div>
+            <div class="concept-text">
+              <h4>Profundidade e Caminho</h4>
+              <p>Profundidade = nº de arestas até a raiz. Caminho = sequência de nós da raiz ao destino.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIX DIRS INFO -->
+      <div class="concept-card">
+        <div class="concept-header" style="background:var(--accent)">
+          <span style="font-size:16px">🗂️</span>
+          <h3>Diretórios Padrão Unix/Linux</h3>
+        </div>
+        <div class="concept-body">
+          <table style="width:100%; border-collapse:collapse; font-family:'JetBrains Mono',monospace; font-size:11px;">
+            <tr style="border-bottom:1px solid var(--line)">
+              <td style="padding:7px 0; color:var(--sys); font-weight:700;">/bin</td>
+              <td style="padding:7px 0 7px 12px; color:var(--muted)">Comandos essenciais do sistema</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line)">
+              <td style="padding:7px 0; color:var(--sys); font-weight:700;">/etc</td>
+              <td style="padding:7px 0 7px 12px; color:var(--muted)">Arquivos de configuração global</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line)">
+              <td style="padding:7px 0; color:var(--dir); font-weight:700;">/home</td>
+              <td style="padding:7px 0 7px 12px; color:var(--muted)">Diretórios pessoais dos usuários</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line)">
+              <td style="padding:7px 0; color:var(--sys); font-weight:700;">/var</td>
+              <td style="padding:7px 0 7px 12px; color:var(--muted)">Logs e dados variáveis</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line)">
+              <td style="padding:7px 0; color:var(--sys); font-weight:700;">/tmp</td>
+              <td style="padding:7px 0 7px 12px; color:var(--muted)">Arquivos temporários (volátil)</td>
+            </tr>
+            <tr>
+              <td style="padding:7px 0; color:var(--sys); font-weight:700;">/usr</td>
+              <td style="padding:7px 0 7px 12px; color:var(--muted)">Programas e libs de usuário</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /right-panel -->
+  </div><!-- /main-layout -->
+
+  <footer>
+    Sistemas Operacionais · Estrutura de Diretórios · Unix / Linux · Hierarquia FHS
+  </footer>
+
+</div>
+</body>
+</html>

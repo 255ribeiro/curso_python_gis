@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Arquivos Windows</title>
+<link href="https://fonts.googleapis.com/css2?family=Consolas:wght@400;700&family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #1c2333;
+  --border: #30363d;
+  --border2: #21262d;
+  --win-blue: #0078d4;
+  --win-blue-light: #50a8f0;
+  --win-blue-dim: rgba(0,120,212,0.15);
+  --sys: #e8a838;
+  --sys-dim: rgba(232,168,56,0.12);
+  --user: #3fb950;
+  --user-dim: rgba(63,185,80,0.12);
+  --file: #79c0ff;
+  --file-dim: rgba(121,192,255,0.08);
+  --reg: #ff7b72;
+  --reg-dim: rgba(255,123,114,0.12);
+  --drive: #bf91f3;
+  --drive-dim: rgba(191,145,243,0.15);
+  --text: #e6edf3;
+  --muted: #6e7681;
+  --muted2: #8b949e;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  padding: 44px 28px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* scanlines subtle */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1120px;
+}
+
+/* ── HEADER ── */
+header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  animation: rise 0.7s ease both;
+}
+
+.win-logo {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 16px;
+}
+
+.win-pane {
+  width: 18px; height: 18px;
+  border-radius: 2px;
+}
+
+.header-left h1 {
+  font-size: clamp(24px, 4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.header-left h1 .accent { color: var(--win-blue-light); }
+
+.header-left p {
+  margin-top: 10px;
+  color: var(--muted2);
+  font-size: 13.5px;
+  font-weight: 300;
+  max-width: 460px;
+  line-height: 1.65;
+}
+
+/* LEGEND */
+.legend-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 210px;
+}
+
+.legend-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+}
+
+.leg-dot {
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── LAYOUT ── */
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 330px;
+  gap: 22px;
+  align-items: start;
+  animation: rise 0.7s ease 0.15s both;
+}
+
+/* ── EXPLORER WINDOW ── */
+.explorer {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+/* Title bar */
+.title-bar {
+  background: #1f2937;
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.title-bar-top {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px 8px;
+  gap: 10px;
+}
+
+.win-controls {
+  display: flex;
+  gap: 6px;
+  margin-right: 4px;
+}
+
+.wc { width: 12px; height: 12px; border-radius: 50%; }
+.wc-min { background: #fbbf24; }
+.wc-max { background: #34d399; }
+.wc-close { background: #f87171; }
+
+.title-text {
+  font-size: 12px;
+  color: var(--muted2);
+  font-weight: 500;
+  flex: 1;
+  text-align: center;
+  margin-right: 60px;
+}
+
+/* Toolbar */
+.toolbar {
+  background: #1a2030;
+  border-bottom: 1px solid var(--border2);
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tb-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted2);
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: default;
+  transition: all 0.15s;
+}
+
+.tb-btn:hover {
+  background: var(--surface2);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.tb-sep { width: 1px; height: 14px; background: var(--border); margin: 0 2px; }
+
+/* Address bar */
+.addr-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: var(--bg);
+  border-top: 1px solid var(--border2);
+}
+
+.addr-arrow {
+  color: var(--muted);
+  font-size: 14px;
+  cursor: default;
+}
+
+.addr-path {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  color: var(--text);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 5px 12px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.addr-seg { color: var(--muted2); }
+.addr-sep { color: var(--muted); margin: 0 2px; }
+.addr-active { color: var(--win-blue-light); }
+
+/* Two-pane layout */
+.panes {
+  display: flex;
+  height: 520px;
+}
+
+/* Left nav */
+.nav-pane {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border2);
+  padding: 12px 0;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+.nav-section {
+  padding: 0 0 12px 0;
+  margin-bottom: 2px;
+}
+
+.nav-section-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 16px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 16px;
+  font-size: 12px;
+  color: var(--muted2);
+  cursor: default;
+  transition: background 0.12s;
+  border-radius: 0;
+}
+
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { background: var(--win-blue-dim); color: var(--win-blue-light); }
+.nav-item .ni { font-size: 14px; width: 18px; }
+.nav-sep { height: 1px; background: var(--border2); margin: 4px 12px; }
+
+/* Tree pane */
+.tree-pane {
+  flex: 1;
+  overflow: auto;
+  padding: 14px 16px;
+  background: var(--surface);
+}
+
+/* Tree nodes */
+.tree-node {
+  position: relative;
+}
+
+.node-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: default;
+  transition: background 0.12s;
+  white-space: nowrap;
+  position: relative;
+}
+
+.node-row:hover { background: var(--surface2); }
+.node-row.selected { background: var(--win-blue-dim); outline: 1px solid rgba(0,120,212,0.3); }
+
+.expand-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: var(--muted);
+  flex-shrink: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  border-radius: 3px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+}
+
+.node-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+.node-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.node-type {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.node-size {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: auto;
+  padding-left: 12px;
+}
+
+/* Type styles */
+.t-drive .node-name { color: var(--drive); font-weight: 600; font-size: 13px; }
+.t-drive .node-type { background: var(--drive-dim); color: var(--drive); }
+
+.t-sys .node-name { color: var(--sys); font-weight: 600; }
+.t-sys .node-type { background: var(--sys-dim); color: var(--sys); }
+
+.t-user .node-name { color: var(--user); font-weight: 500; }
+.t-user .node-type { background: var(--user-dim); color: var(--user); }
+
+.t-file .node-name { color: var(--file); }
+.t-file .node-type { background: var(--file-dim); color: var(--file); }
+
+.t-reg .node-name { color: var(--reg); font-weight: 500; }
+.t-reg .node-type { background: var(--reg-dim); color: var(--reg); }
+
+/* Children indentation */
+.children {
+  margin-left: 22px;
+  padding-left: 14px;
+  border-left: 1px solid var(--border2);
+}
+
+/* Horizontal connector */
+.node-row::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  width: 14px;
+  height: 1px;
+  background: var(--border2);
+}
+
+.node-row.is-drive::before { display: none; }
+
+/* ── RIGHT PANEL ── */
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.info-card-head {
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--surface2);
+}
+
+.info-card-head h3 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.info-card-body {
+  padding: 16px 18px;
+}
+
+/* STATS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stat {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-lbl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* PATH CARD */
+.path-card {
+  background: #0d1117;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.path-card-head {
+  background: #1a1a2e;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.path-card-head span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--win-blue-light);
+}
+
+.cmd-body {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cmd-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cmd-comment {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.cmd-line {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ps { color: #6e9fff; }
+.drive-c { color: var(--drive); }
+.dir-c { color: var(--sys); }
+.cmd-c { color: var(--user); }
+.arg-c { color: var(--file); }
+.sep-c { color: var(--muted); }
+.env-c { color: var(--reg); }
+
+/* DRIVE CARD */
+.drives-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.drive-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+}
+
+.drive-letter {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--drive);
+  width: 28px;
+  text-align: center;
+}
+
+.drive-info {
+  flex: 1;
+}
+
+.drive-name {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.drive-bar-bg {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.drive-bar {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--win-blue);
+}
+
+.drive-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* CONCEPTS */
+.concept-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.concept-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border2);
+}
+
+.concept-item:last-child { border-bottom: none; }
+
+.c-icon {
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.c-text h4 {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  color: var(--text);
+}
+
+.c-text p {
+  font-size: 11px;
+  color: var(--muted2);
+  line-height: 1.6;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOTER */
+footer {
+  margin-top: 44px;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  animation: rise 1s ease 1s both;
+}
+
+/* ANIMATIONS */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tree-node { animation: rise 0.4s ease both; }
+.tree-node:nth-child(1) { animation-delay: 0.05s; }
+.tree-node:nth-child(2) { animation-delay: 0.1s; }
+.tree-node:nth-child(3) { animation-delay: 0.15s; }
+.tree-node:nth-child(4) { animation-delay: 0.2s; }
+.tree-node:nth-child(5) { animation-delay: 0.25s; }
+.tree-node:nth-child(6) { animation-delay: 0.3s; }
+
+@media (max-width: 820px) {
+  .main-layout { grid-template-columns: 1fr; }
+  .panes { height: auto; flex-direction: column; }
+  .nav-pane { width: 100%; height: 120px; border-right: none; border-bottom: 1px solid var(--border2); display: flex; flex-wrap: wrap; padding: 8px; }
+  .nav-section { padding: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+  .nav-section-title { display: none; }
+  .nav-item { padding: 4px 10px; border-radius: 6px; }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <div class="win-logo">
+        <div class="win-pane" style="background:#f25022"></div>
+        <div class="win-pane" style="background:#7fba00"></div>
+        <div class="win-pane" style="background:#00a4ef"></div>
+        <div class="win-pane" style="background:#ffb900"></div>
+      </div>
+      <h1>Sistema de Arquivos<br><span class="accent">Windows NTFS</span></h1>
+      <p>Hierarquia de unidades, diretórios e arquivos no Windows. Diferentemente do Unix, cada volume possui sua própria raiz identificada por uma letra de unidade (<strong style="color:var(--drive)">C:\</strong>, <strong style="color:var(--drive)">D:\</strong>…).</p>
+    </div>
+
+    <div class="legend-box">
+      <div class="legend-title">Legenda</div>
+      <div class="legend-item"><div class="leg-dot" style="background:var(--drive)"></div><span style="color:var(--drive)">Unidade / Drive</span></div>
+      <div class="legend-item"><div class="leg-dot" style="background:var(--sys)"></div><span style="color:var(--sys)">Diretório do Sistema</span></div>
+      <div class="legend-item"><div class="leg-dot" style="background:var(--user)"></div><span style="color:var(--user)">Diretório de Usuário</span></div>
+      <div class="legend-item"><div class="leg-dot" style="background:var(--file)"></div><span style="color:var(--file)">Arquivo</span></div>
+      <div class="legend-item"><div class="leg-dot" style="background:var(--reg)"></div><span style="color:var(--reg)">Config / Registro</span></div>
+    </div>
+  </header>
+
+  <div class="main-layout">
+
+    <!-- EXPLORER WINDOW -->
+    <div class="explorer">
+      <!-- Title bar -->
+      <div class="title-bar">
+        <div class="title-bar-top">
+          <div class="win-controls">
+            <div class="wc wc-close"></div>
+            <div class="wc wc-min"></div>
+            <div class="wc wc-max"></div>
+          </div>
+          <div class="title-text">📂 Explorador de Arquivos — Este Computador</div>
+        </div>
+        <div class="toolbar">
+          <span class="tb-btn">← Voltar</span>
+          <span class="tb-btn">→ Avançar</span>
+          <div class="tb-sep"></div>
+          <span class="tb-btn">📋 Copiar</span>
+          <span class="tb-btn">✂️ Recortar</span>
+          <span class="tb-btn">📄 Colar</span>
+          <div class="tb-sep"></div>
+          <span class="tb-btn">🗑️ Excluir</span>
+          <span class="tb-btn">✏️ Renomear</span>
+          <div class="tb-sep"></div>
+          <span class="tb-btn">👁️ Exibir</span>
+        </div>
+        <div class="addr-bar">
+          <span class="addr-arrow">◀</span>
+          <span class="addr-arrow">▶</span>
+          <div class="addr-path">
+            <span class="addr-seg">💻 Este Computador</span>
+            <span class="addr-sep">&rsaquo;</span>
+            <span class="addr-seg">🖴 Disco Local (C:)</span>
+            <span class="addr-sep">&rsaquo;</span>
+            <span class="addr-active">Usuários</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panes -->
+      <div class="panes">
+        <!-- Nav sidebar -->
+        <div class="nav-pane">
+          <div class="nav-section">
+            <div class="nav-section-title">Acesso Rápido</div>
+            <div class="nav-item active"><span class="ni">📌</span>Área de trabalho</div>
+            <div class="nav-item"><span class="ni">⬇️</span>Downloads</div>
+            <div class="nav-item"><span class="ni">📄</span>Documentos</div>
+            <div class="nav-item"><span class="ni">🖼️</span>Imagens</div>
+          </div>
+          <div class="nav-sep"></div>
+          <div class="nav-section">
+            <div class="nav-section-title">Este Computador</div>
+            <div class="nav-item"><span class="ni">🖴</span>Disco Local (C:)</div>
+            <div class="nav-item"><span class="ni">💿</span>Dados (D:)</div>
+            <div class="nav-item"><span class="ni">📀</span>Recovery (E:)</div>
+          </div>
+          <div class="nav-sep"></div>
+          <div class="nav-section">
+            <div class="nav-section-title">Rede</div>
+            <div class="nav-item"><span class="ni">🌐</span>Rede</div>
+          </div>
+        </div>
+
+        <!-- Tree pane -->
+        <div class="tree-pane">
+
+          <!-- C:\ -->
+          <div class="tree-node">
+            <div class="node-row is-drive t-drive">
+              <span class="expand-icon">▼</span>
+              <span class="node-icon">🖴</span>
+              <span class="node-name">C:\</span>
+              <span class="node-type">volume</span>
+              <span class="node-size">Disco Local</span>
+            </div>
+
+            <div class="children">
+
+              <!-- Windows -->
+              <div class="tree-node">
+                <div class="node-row t-sys">
+                  <span class="expand-icon">▼</span>
+                  <span class="node-icon">🪟</span>
+                  <span class="node-name">Windows</span>
+                  <span class="node-type">sistema</span>
+                  <span class="node-size">núcleo do SO</span>
+                </div>
+                <div class="children">
+                  <div class="tree-node">
+                    <div class="node-row t-sys">
+                      <span class="expand-icon">▼</span>
+                      <span class="node-icon">📁</span>
+                      <span class="node-name">System32</span>
+                      <span class="node-size">DLLs · drivers · exe</span>
+                    </div>
+                    <div class="children">
+                      <div class="tree-node">
+                        <div class="node-row t-file">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📄</span>
+                          <span class="node-name">cmd.exe</span>
+                          <span class="node-size">executável</span>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-file">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📄</span>
+                          <span class="node-name">notepad.exe</span>
+                          <span class="node-size">executável</span>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-file">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📄</span>
+                          <span class="node-name">kernel32.dll</span>
+                          <span class="node-size">biblioteca</span>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-sys">
+                          <span class="expand-icon">▶</span>
+                          <span class="node-icon">📁</span>
+                          <span class="node-name">drivers</span>
+                          <span class="node-size">drivers de hardware</span>
+                        </div>
+                        <div class="children">
+                          <div class="tree-node">
+                            <div class="node-row t-file">
+                              <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                              <span class="node-icon">📄</span>
+                              <span class="node-name">ntfs.sys</span>
+                              <span class="node-size">driver NTFS</span>
+                            </div>
+                          </div>
+                          <div class="tree-node">
+                            <div class="node-row t-file">
+                              <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                              <span class="node-icon">📄</span>
+                              <span class="node-name">tcpip.sys</span>
+                              <span class="node-size">driver rede</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tree-node">
+                    <div class="node-row t-sys">
+                      <span class="expand-icon">▶</span>
+                      <span class="node-icon">📁</span>
+                      <span class="node-name">SysWOW64</span>
+                      <span class="node-size">apps 32-bit no Win 64</span>
+                    </div>
+                  </div>
+                  <div class="tree-node">
+                    <div class="node-row t-sys">
+                      <span class="expand-icon">▶</span>
+                      <span class="node-icon">📁</span>
+                      <span class="node-name">Temp</span>
+                      <span class="node-size">arquivos temporários</span>
+                    </div>
+                    <div class="children">
+                      <div class="tree-node">
+                        <div class="node-row t-file">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📄</span>
+                          <span class="node-name">setup_tmp_a4f2.dat</span>
+                          <span class="node-size">4 KB</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Program Files -->
+              <div class="tree-node">
+                <div class="node-row t-sys">
+                  <span class="expand-icon">▼</span>
+                  <span class="node-icon">📦</span>
+                  <span class="node-name">Program Files</span>
+                  <span class="node-type">sistema</span>
+                  <span class="node-size">apps 64-bit</span>
+                </div>
+                <div class="children">
+                  <div class="tree-node">
+                    <div class="node-row t-sys">
+                      <span class="expand-icon">▶</span>
+                      <span class="node-icon">📁</span>
+                      <span class="node-name">Microsoft Office</span>
+                    </div>
+                    <div class="children">
+                      <div class="tree-node">
+                        <div class="node-row t-file">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📄</span>
+                          <span class="node-name">WINWORD.EXE</span>
+                          <span class="node-size">48 MB</span>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-file">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📄</span>
+                          <span class="node-name">EXCEL.EXE</span>
+                          <span class="node-size">46 MB</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tree-node">
+                    <div class="node-row t-sys">
+                      <span class="expand-icon">▶</span>
+                      <span class="node-icon">📁</span>
+                      <span class="node-name">Google</span>
+                    </div>
+                    <div class="children">
+                      <div class="tree-node">
+                        <div class="node-row t-file">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📄</span>
+                          <span class="node-name">chrome.exe</span>
+                          <span class="node-size">3.2 MB</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Program Files (x86) -->
+              <div class="tree-node">
+                <div class="node-row t-sys">
+                  <span class="expand-icon">▶</span>
+                  <span class="node-icon">📦</span>
+                  <span class="node-name">Program Files (x86)</span>
+                  <span class="node-type">sistema</span>
+                  <span class="node-size">apps 32-bit</span>
+                </div>
+              </div>
+
+              <!-- Users -->
+              <div class="tree-node">
+                <div class="node-row t-user selected">
+                  <span class="expand-icon">▼</span>
+                  <span class="node-icon">👥</span>
+                  <span class="node-name">Users</span>
+                  <span class="node-type">usuários</span>
+                  <span class="node-size">perfis de usuário</span>
+                </div>
+                <div class="children">
+
+                  <!-- Public -->
+                  <div class="tree-node">
+                    <div class="node-row t-user">
+                      <span class="expand-icon">▶</span>
+                      <span class="node-icon">🌐</span>
+                      <span class="node-name">Public</span>
+                      <span class="node-size">compartilhado</span>
+                    </div>
+                    <div class="children">
+                      <div class="tree-node">
+                        <div class="node-row t-user">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📁</span>
+                          <span class="node-name">Documents</span>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-user">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📁</span>
+                          <span class="node-name">Pictures</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Alice -->
+                  <div class="tree-node">
+                    <div class="node-row t-user">
+                      <span class="expand-icon">▼</span>
+                      <span class="node-icon">👤</span>
+                      <span class="node-name">Alice</span>
+                      <span class="node-type">usuário</span>
+                    </div>
+                    <div class="children">
+                      <div class="tree-node">
+                        <div class="node-row t-user">
+                          <span class="expand-icon">▶</span>
+                          <span class="node-icon">📁</span>
+                          <span class="node-name">Desktop</span>
+                        </div>
+                        <div class="children">
+                          <div class="tree-node">
+                            <div class="node-row t-file">
+                              <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                              <span class="node-icon">📄</span>
+                              <span class="node-name">atalho_chrome.lnk</span>
+                              <span class="node-size">atalho</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-user">
+                          <span class="expand-icon">▶</span>
+                          <span class="node-icon">📁</span>
+                          <span class="node-name">Documents</span>
+                        </div>
+                        <div class="children">
+                          <div class="tree-node">
+                            <div class="node-row t-file">
+                              <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                              <span class="node-icon">📄</span>
+                              <span class="node-name">relatorio.docx</span>
+                              <span class="node-size">1.2 MB</span>
+                            </div>
+                          </div>
+                          <div class="tree-node">
+                            <div class="node-row t-file">
+                              <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                              <span class="node-icon">📄</span>
+                              <span class="node-name">planilha.xlsx</span>
+                              <span class="node-size">840 KB</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-user">
+                          <span class="expand-icon">▶</span>
+                          <span class="node-icon">📁</span>
+                          <span class="node-name">Downloads</span>
+                        </div>
+                        <div class="children">
+                          <div class="tree-node">
+                            <div class="node-row t-file">
+                              <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                              <span class="node-icon">📄</span>
+                              <span class="node-name">instalador.exe</span>
+                              <span class="node-size">58 MB</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-user">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📁</span>
+                          <span class="node-name">Pictures</span>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-user">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📁</span>
+                          <span class="node-name">Videos</span>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-user">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📁</span>
+                          <span class="node-name">Music</span>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-reg">
+                          <span class="expand-icon">▶</span>
+                          <span class="node-icon">⚙️</span>
+                          <span class="node-name">AppData</span>
+                          <span class="node-type">config</span>
+                          <span class="node-size">oculto</span>
+                        </div>
+                        <div class="children">
+                          <div class="tree-node">
+                            <div class="node-row t-reg">
+                              <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                              <span class="node-icon">📁</span>
+                              <span class="node-name">Local</span>
+                              <span class="node-size">dados locais apps</span>
+                            </div>
+                          </div>
+                          <div class="tree-node">
+                            <div class="node-row t-reg">
+                              <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                              <span class="node-icon">📁</span>
+                              <span class="node-name">Roaming</span>
+                              <span class="node-size">perfil sincronizado</span>
+                            </div>
+                          </div>
+                          <div class="tree-node">
+                            <div class="node-row t-reg">
+                              <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                              <span class="node-icon">📁</span>
+                              <span class="node-name">LocalLow</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Bob -->
+                  <div class="tree-node">
+                    <div class="node-row t-user">
+                      <span class="expand-icon">▶</span>
+                      <span class="node-icon">👤</span>
+                      <span class="node-name">Bob</span>
+                      <span class="node-type">usuário</span>
+                    </div>
+                    <div class="children">
+                      <div class="tree-node">
+                        <div class="node-row t-user">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📁</span>
+                          <span class="node-name">Desktop</span>
+                        </div>
+                      </div>
+                      <div class="tree-node">
+                        <div class="node-row t-user">
+                          <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                          <span class="node-icon">📁</span>
+                          <span class="node-name">Documents</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- ProgramData -->
+              <div class="tree-node">
+                <div class="node-row t-reg">
+                  <span class="expand-icon">▶</span>
+                  <span class="node-icon">⚙️</span>
+                  <span class="node-name">ProgramData</span>
+                  <span class="node-type">config</span>
+                  <span class="node-size">oculto · config apps</span>
+                </div>
+              </div>
+
+              <!-- pagefile.sys -->
+              <div class="tree-node">
+                <div class="node-row t-reg">
+                  <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                  <span class="node-icon">📄</span>
+                  <span class="node-name">pagefile.sys</span>
+                  <span class="node-type">config</span>
+                  <span class="node-size">memória virtual</span>
+                </div>
+              </div>
+
+              <!-- hiberfil.sys -->
+              <div class="tree-node">
+                <div class="node-row t-reg">
+                  <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                  <span class="node-icon">📄</span>
+                  <span class="node-name">hiberfil.sys</span>
+                  <span class="node-type">config</span>
+                  <span class="node-size">hibernação</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- D:\ -->
+          <div class="tree-node" style="margin-top:10px">
+            <div class="node-row is-drive t-drive">
+              <span class="expand-icon">▼</span>
+              <span class="node-icon">💿</span>
+              <span class="node-name">D:\</span>
+              <span class="node-type">volume</span>
+              <span class="node-size">Dados pessoais</span>
+            </div>
+            <div class="children">
+              <div class="tree-node">
+                <div class="node-row t-user">
+                  <span class="expand-icon">▶</span>
+                  <span class="node-icon">📁</span>
+                  <span class="node-name">Backup</span>
+                </div>
+                <div class="children">
+                  <div class="tree-node">
+                    <div class="node-row t-file">
+                      <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                      <span class="node-icon">📄</span>
+                      <span class="node-name">backup_2024.zip</span>
+                      <span class="node-size">4.8 GB</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tree-node">
+                <div class="node-row t-user">
+                  <span class="expand-icon" style="border-color:transparent;background:transparent"></span>
+                  <span class="node-icon">📁</span>
+                  <span class="node-name">Projetos</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /tree-pane -->
+      </div><!-- /panes -->
+    </div><!-- /explorer -->
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-num" style="color:var(--drive)">2</div>
+          <div class="stat-lbl">Unidades</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" style="color:var(--sys)">18</div>
+          <div class="stat-lbl">Diretórios</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" style="color:var(--file)">15</div>
+          <div class="stat-lbl">Arquivos</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" style="color:var(--reg)">5</div>
+          <div class="stat-lbl">Configs</div>
+        </div>
+      </div>
+
+      <!-- Drives -->
+      <div class="info-card">
+        <div class="info-card-head">
+          <span>🖴</span>
+          <h3>Unidades de Disco</h3>
+        </div>
+        <div class="info-card-body">
+          <div class="drives-list">
+            <div class="drive-row">
+              <div class="drive-letter">C:</div>
+              <div class="drive-info">
+                <div class="drive-name">Disco Local — Sistema</div>
+                <div class="drive-bar-bg"><div class="drive-bar" style="width:72%; background:var(--win-blue)"></div></div>
+              </div>
+              <div class="drive-meta">72% · 360 GB</div>
+            </div>
+            <div class="drive-row">
+              <div class="drive-letter">D:</div>
+              <div class="drive-info">
+                <div class="drive-name">Dados — Pessoal</div>
+                <div class="drive-bar-bg"><div class="drive-bar" style="width:35%; background:var(--user)"></div></div>
+              </div>
+              <div class="drive-meta">35% · 350 GB</div>
+            </div>
+            <div class="drive-row">
+              <div class="drive-letter">E:</div>
+              <div class="drive-info">
+                <div class="drive-name">Recovery — Partição</div>
+                <div class="drive-bar-bg"><div class="drive-bar" style="width:90%; background:var(--reg)"></div></div>
+              </div>
+              <div class="drive-meta">90% · 900 MB</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CMD paths -->
+      <div class="path-card">
+        <div class="path-card-head">
+          <span style="font-size:14px">💻</span>
+          <span>Caminhos no PowerShell / CMD</span>
+        </div>
+        <div class="cmd-body">
+          <div class="cmd-row">
+            <span class="cmd-comment"># Caminho absoluto</span>
+            <div class="cmd-line">
+              <span class="drive-c">C:</span><span class="sep-c">\</span><span class="dir-c">Users</span><span class="sep-c">\</span><span class="cmd-c">Alice</span><span class="sep-c">\</span><span class="dir-c">Documents</span><span class="sep-c">\</span><span class="arg-c">relatorio.docx</span>
+            </div>
+          </div>
+          <div class="cmd-row">
+            <span class="cmd-comment"># Variável de ambiente</span>
+            <div class="cmd-line">
+              <span class="env-c">%USERPROFILE%</span><span class="sep-c">\</span><span class="dir-c">Documents</span>
+            </div>
+          </div>
+          <div class="cmd-row">
+            <span class="cmd-comment"># Pasta atual (.)</span>
+            <div class="cmd-line">
+              <span class="ps">.</span><span class="sep-c">\</span><span class="arg-c">relatorio.docx</span>
+            </div>
+          </div>
+          <div class="cmd-row">
+            <span class="cmd-comment"># Subir nível (..)</span>
+            <div class="cmd-line">
+              <span class="ps">..</span><span class="sep-c">\</span><span class="cmd-c">Bob</span><span class="sep-c">\</span><span class="dir-c">Desktop</span>
+            </div>
+          </div>
+          <div class="cmd-row">
+            <span class="cmd-comment"># Listar arquivos</span>
+            <div class="cmd-line">
+              <span class="ps">PS&gt;</span>&nbsp;<span class="cmd-c">dir</span>&nbsp;<span class="drive-c">C:\Users\Alice</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Concepts -->
+      <div class="info-card">
+        <div class="info-card-head">
+          <span>📚</span>
+          <h3>Diferenças Windows × Unix</h3>
+        </div>
+        <div class="info-card-body">
+          <div class="concept-list">
+            <div class="concept-item">
+              <div class="c-icon">🖴</div>
+              <div class="c-text">
+                <h4>Letras de unidade (C:\, D:\)</h4>
+                <p>Cada volume tem sua própria raiz. No Unix, tudo é montado sob uma única raiz /.</p>
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="c-icon">🔀</div>
+              <div class="c-text">
+                <h4>Separador \ (barra invertida)</h4>
+                <p>Windows usa \. Unix usa /. PowerShell aceita ambos modernamente.</p>
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="c-icon">👁️</div>
+              <div class="c-text">
+                <h4>Arquivos ocultos</h4>
+                <p>No Windows, atributo "hidden" define ocultação. No Unix, prefixo ponto (.) é suficiente.</p>
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="c-icon">⚙️</div>
+              <div class="c-text">
+                <h4>AppData & Registro</h4>
+                <p>Configs ficam em AppData (arquivo) e no Registro do Windows (base de dados interna).</p>
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="c-icon">🔤</div>
+              <div class="c-text">
+                <h4>Extensões obrigatórias</h4>
+                <p>Windows usa extensão para identificar tipo (.exe, .dll, .docx). Unix não depende delas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /right-panel -->
+  </div><!-- /main-layout -->
+
+  <footer>
+    Sistemas Operacionais · Windows NTFS · Estrutura de Diretórios · FAT32 · ReFS
+  </footer>
+
+</div>
+</body>
+</html>

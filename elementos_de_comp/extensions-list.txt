@@ -1,0 +1,12 @@
+ms-python.python
+ms-python.vscode-pylance
+ms-python.debugpy
+njpwerner.autodocstring
+charliermarsh.ruff
+kevinrose.vsc-python-indent
+ms-toolsai.jupyter
+ms-toolsai.jupyter-keymap
+ms-toolsai.jupyter-celltags
+ms-toolsai.vscode-jupyter-slideshow
+mechatroner.rainbow-csv
+ms-toolsai.datawrangler

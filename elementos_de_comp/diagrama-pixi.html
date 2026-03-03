@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixi — Gerenciador de Ambientes Python</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:     #0b0f1a;
+  --card:   #111827;
+  --border: #1f2937;
+  --init:   #a78bfa;
+  --pkg:    #34d399;
+  --run:    #60a5fa;
+  --info:   #fbbf24;
+  --yellow: #fbbf24;
+  --purple: #a78bfa;
+  --cyan:   #67e8f9;
+  --str:    #f97316;
+  --muted:  #374151;
+  --muted2: #6b7280;
+  --white:  #f3f4f6;
+  --prompt: #34d399;
+  --pixi:   #a78bfa;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Fira Code', monospace;
+  color: var(--white);
+  min-height: 100vh;
+  padding: 36px 22px 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wrapper { width: 100%; max-width: 1020px; }
+
+/* ── HEADER ── */
+header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.pixi-logo {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 0 24px rgba(124,58,237,0.35);
+  flex-shrink: 0;
+}
+
+header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(18px, 3.5vw, 32px);
+  font-weight: 800;
+  color: #fff;
+}
+
+header p {
+  margin-top: 5px;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+
+/* ── INSTALL SECTION (full width) ── */
+.install-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--pixi);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.install-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.install-head h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--pixi);
+}
+
+.install-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+}
+
+.os-block {
+  padding: 16px 20px;
+  border-right: 1px solid var(--border);
+}
+
+.os-block:last-child { border-right: none; }
+
+.os-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.os-cmd {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.os-line {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 8px 12px;
+  font-size: 11px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.os-line-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-bottom: 2px;
+}
+
+.c-cmd  { color: var(--yellow); font-weight: 600; }
+.c-flag { color: var(--purple); }
+.c-arg  { color: var(--muted2); }
+.c-pt   { color: var(--cyan); }
+.c-str  { color: var(--str); }
+.c-op   { color: var(--white); }
+.c-url  { color: #93c5fd; }
+
+/* ── MAIN GRID ── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+/* ── SECTION ── */
+.section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.section-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.s-icon { font-size: 16px; }
+
+.section-head h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px; font-weight: 700;
+}
+
+.s-init .section-head { border-left: 3px solid var(--init); }
+.s-pkg  .section-head { border-left: 3px solid var(--pkg);  }
+.s-run  .section-head { border-left: 3px solid var(--run);  }
+.s-info .section-head { border-left: 3px solid var(--info); }
+
+.s-init .section-head h2 { color: var(--init); }
+.s-pkg  .section-head h2 { color: var(--pkg);  }
+.s-run  .section-head h2 { color: var(--run);  }
+.s-info .section-head h2 { color: var(--info); }
+
+/* ── CMD ROW ── */
+.cmd-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  align-items: stretch;
+  border-bottom: 1px solid rgba(31,41,55,0.9);
+  transition: background 0.12s;
+}
+
+.cmd-row:last-child { border-bottom: none; }
+.cmd-row:hover { background: rgba(255,255,255,0.03); }
+
+.cmd-badge {
+  display: flex; align-items: center; justify-content: center;
+  padding: 13px 8px;
+  border-right: 1px solid var(--border);
+  background: rgba(0,0,0,0.25);
+}
+
+.badge-pill {
+  font-size: 12px; font-weight: 700;
+  border-radius: 7px;
+  padding: 5px 8px;
+  white-space: nowrap; text-align: center; line-height: 1;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.s-init .badge-pill { background: rgba(167,139,250,0.12); color: var(--init); border: 1px solid rgba(167,139,250,0.3); }
+.s-pkg  .badge-pill { background: rgba(52,211,153,0.10);  color: var(--pkg);  border: 1px solid rgba(52,211,153,0.28); }
+.s-run  .badge-pill { background: rgba(96,165,250,0.10);  color: var(--run);  border: 1px solid rgba(96,165,250,0.28); }
+.s-info .badge-pill { background: rgba(251,191,36,0.10);  color: var(--info); border: 1px solid rgba(251,191,36,0.28); }
+
+.cmd-detail {
+  padding: 10px 16px;
+  display: flex; flex-direction: column;
+  justify-content: center; gap: 4px;
+}
+
+.cmd-full {
+  font-size: 11.5px;
+  display: flex; align-items: center;
+  flex-wrap: wrap; gap: 3px; line-height: 1.4;
+}
+
+.cmd-desc {
+  font-size: 10px; color: var(--muted2); line-height: 1.5;
+}
+
+/* ── TIPS ── */
+.tips {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 12px; margin-top: 18px;
+}
+
+.tip {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.tip h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px; color: var(--pixi); margin-bottom: 5px;
+}
+
+.tip p { font-size: 10px; color: var(--muted2); line-height: 1.6; }
+
+.tip code {
+  color: var(--cyan);
+  background: rgba(0,0,0,0.3);
+  padding: 1px 5px; border-radius: 3px; font-size: 10px;
+}
+
+footer {
+  margin-top: 24px; text-align: center;
+  font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--muted2);
+}
+
+@media (max-width: 700px) {
+  .grid { grid-template-columns: 1fr; }
+  .install-grid { grid-template-columns: 1fr; }
+  .tips { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="pixi-logo">✨</div>
+    <div>
+      <h1>Pixi — Gerenciador de Ambientes Python</h1>
+      <p>Instalação · Projeto · Pacotes · Execução · Informações</p>
+    </div>
+  </header>
+
+  <!-- ══ INSTALAÇÃO ══ -->
+  <div class="install-section">
+    <div class="install-head">
+      <span style="font-size:16px">⬇️</span>
+      <h2>Instalação do Pixi — por Sistema Operacional</h2>
+    </div>
+    <div class="install-grid">
+
+      <!-- Linux -->
+      <div class="os-block">
+        <div class="os-title">
+          <span>🐧</span>
+          <span style="color:#34d399">Linux</span>
+        </div>
+        <div class="os-cmd">
+          <div class="os-line">
+            <span class="os-line-label">via curl (recomendado)</span>
+            <span><span class="c-cmd">curl</span> <span class="c-flag">-fsSL</span> <span class="c-url">https://pixi.sh/install.sh</span> <span class="c-op">|</span> <span class="c-cmd">bash</span></span>
+          </div>
+          <div class="os-line">
+            <span class="os-line-label">recarregar o shell após instalar</span>
+            <span><span class="c-cmd">source</span> <span class="c-arg">~/.bashrc</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- macOS -->
+      <div class="os-block">
+        <div class="os-title">
+          <span>🍎</span>
+          <span style="color:#60a5fa">macOS</span>
+        </div>
+        <div class="os-cmd">
+          <div class="os-line">
+            <span class="os-line-label">via curl (recomendado)</span>
+            <span><span class="c-cmd">curl</span> <span class="c-flag">-fsSL</span> <span class="c-url">https://pixi.sh/install.sh</span> <span class="c-op">|</span> <span class="c-cmd">bash</span></span>
+          </div>
+          <div class="os-line">
+            <span class="os-line-label">ou via Homebrew</span>
+            <span><span class="c-cmd">brew</span> <span class="c-arg">install</span> <span class="c-str">pixi</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Windows -->
+      <div class="os-block">
+        <div class="os-title">
+          <span>🪟</span>
+          <span style="color:#fbbf24">Windows</span>
+        </div>
+        <div class="os-cmd">
+          <div class="os-line">
+            <span class="os-line-label">PowerShell (recomendado)</span>
+            <span><span class="c-cmd">iwr</span> <span class="c-flag">-useb</span> <span class="c-url">https://pixi.sh/install.ps1</span> <span class="c-op">|</span> <span class="c-cmd">iex</span></span>
+          </div>
+          <div class="os-line">
+            <span class="os-line-label">ou via Winget</span>
+            <span><span class="c-cmd">winget</span> <span class="c-arg">install</span> <span class="c-str">prefix-dev.pixi</span></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ MAIN GRID ══ -->
+  <div class="grid">
+
+    <!-- PROJETO / INIT -->
+    <div class="section s-init">
+      <div class="section-head">
+        <span class="s-icon">🚀</span>
+        <h2>Projeto e Ambiente</h2>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi init</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi init</span> <span class="c-arg">meu-projeto</span></div>
+          <div class="cmd-desc">Cria um novo projeto com <code style="color:var(--cyan)">pixi.toml</code> na pasta indicada.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi init .</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi init</span> <span class="c-arg">.</span></div>
+          <div class="cmd-desc">Inicializa o pixi no diretório atual já existente.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi install</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi install</span></div>
+          <div class="cmd-desc">Instala todas as dependências definidas no <code style="color:var(--cyan)">pixi.toml</code>.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi shell</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi shell</span></div>
+          <div class="cmd-desc">Ativa o ambiente do projeto no shell atual.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi clean</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi clean</span></div>
+          <div class="cmd-desc">Remove o ambiente local (.pixi/) e limpa o cache do projeto.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PACOTES -->
+    <div class="section s-pkg">
+      <div class="section-head">
+        <span class="s-icon">📦</span>
+        <h2>Gerenciar Pacotes</h2>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi add</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi add</span> <span class="c-str">numpy pandas</span></div>
+          <div class="cmd-desc">Adiciona pacote(s) conda-forge ao projeto e instala.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">add --pypi</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi add</span> <span class="c-flag">--pypi</span> <span class="c-str">flask</span></div>
+          <div class="cmd-desc">Adiciona pacote direto do PyPI (pip). Requer Python instalado.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">add --dev</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi add</span> <span class="c-flag">--dev</span> <span class="c-str">pytest black</span></div>
+          <div class="cmd-desc">Adiciona dependência apenas para desenvolvimento.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi remove</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi remove</span> <span class="c-str">numpy</span></div>
+          <div class="cmd-desc">Remove pacote do projeto e atualiza o <code style="color:var(--cyan)">pixi.lock</code>.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi update</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi update</span></div>
+          <div class="cmd-desc">Atualiza todos os pacotes para as versões mais recentes compatíveis.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- EXECUÇÃO -->
+    <div class="section s-run">
+      <div class="section-head">
+        <span class="s-icon">▶️</span>
+        <h2>Executar Comandos e Tarefas</h2>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi run</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi run</span> <span class="c-arg">python script.py</span></div>
+          <div class="cmd-desc">Executa um comando dentro do ambiente do projeto.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">run python</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi run</span> <span class="c-arg">python</span></div>
+          <div class="cmd-desc">Abre o interpretador Python do ambiente isolado.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">task add</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi task add</span> <span class="c-str">test</span> <span class="c-arg">'pytest .'</span></div>
+          <div class="cmd-desc">Cria um atalho de tarefa reutilizável no <code style="color:var(--cyan)">pixi.toml</code>.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">run test</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi run</span> <span class="c-str">test</span></div>
+          <div class="cmd-desc">Executa uma tarefa definida no projeto (ex: rodar testes).</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi exec</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi exec</span> <span class="c-arg">cowpy</span> <span class="c-str">"olá"</span></div>
+          <div class="cmd-desc">Executa pacote em ambiente temporário sem instalar no projeto.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- INFO -->
+    <div class="section s-info">
+      <div class="section-head">
+        <span class="s-icon">🔍</span>
+        <h2>Informações e Diagnóstico</h2>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi info</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi info</span></div>
+          <div class="cmd-desc">Exibe sistema, versão do pixi, plataforma e ambientes do projeto.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi list</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi list</span></div>
+          <div class="cmd-desc">Lista todos os pacotes instalados no ambiente atual com versões.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi -V</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi</span> <span class="c-flag">--version</span></div>
+          <div class="cmd-desc">Mostra a versão instalada do pixi.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">global add</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi global install</span> <span class="c-str">ruff</span></div>
+          <div class="cmd-desc">Instala ferramenta globalmente (sem precisar de projeto).</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pixi self-update</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pixi self-update</span></div>
+          <div class="cmd-desc">Atualiza o próprio pixi para a versão mais recente.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- TIPS -->
+  <div class="tips">
+    <div class="tip">
+      <h4>📄 pixi.toml</h4>
+      <p>Arquivo de configuração do projeto. Define dependências, tarefas e canais. Versionar no git junto com <code>pixi.lock</code>.</p>
+    </div>
+    <div class="tip">
+      <h4>🔒 pixi.lock</h4>
+      <p>Arquivo de lock gerado automaticamente com versões exatas. Garante reprodução idêntica do ambiente em qualquer máquina.</p>
+    </div>
+    <div class="tip">
+      <h4>📡 Canais</h4>
+      <p>Por padrão usa <code>conda-forge</code>. Use <code>--pypi</code> para pacotes do PyPI. Canais definem de onde vêm os pacotes.</p>
+    </div>
+    <div class="tip">
+      <h4>🆘 Ajuda</h4>
+      <p>Use <code>pixi --help</code> ou <code>pixi &lt;cmd&gt; --help</code> para ver opções. Docs em <code>pixi.sh</code>.</p>
+    </div>
+  </div>
+
+  <footer>Pixi · prefix.dev · Gerenciamento de Ambientes Python · conda-forge · PyPI</footer>
+
+</div>
+</body>
+</html>

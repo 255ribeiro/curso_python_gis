@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitetura Básica de Computador</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --border: #1e2d45;
+    --cpu: #00d4ff;
+    --mem: #a78bfa;
+    --disk: #fb923c;
+    --io: #34d399;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --bus: #fbbf24;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: 'Syne', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    overflow-x: hidden;
+  }
+
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  header .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--cpu);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  header h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 30%, var(--cpu) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  header p {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  /* ---- DIAGRAM AREA ---- */
+  .diagram {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 0;
+    align-items: center;
+    justify-items: center;
+    position: relative;
+  }
+
+  /* BUS */
+  .bus-horizontal {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 6px;
+    background: var(--bus);
+    box-shadow: 0 0 16px var(--bus), 0 0 40px rgba(251,191,36,0.3);
+    border-radius: 3px;
+    top: calc(50% - 3px);
+    animation: pulse-bus 2s ease-in-out infinite;
+  }
+
+  .bus-label {
+    position: absolute;
+    top: calc(50% - 28px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--bus);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* CARDS */
+  .card {
+    position: relative;
+    border-radius: 16px;
+    padding: 28px 24px;
+    border: 1.5px solid;
+    backdrop-filter: blur(10px);
+    text-align: center;
+    min-width: 180px;
+    max-width: 220px;
+    width: 100%;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .card .icon {
+    font-size: 36px;
+    margin-bottom: 14px;
+    display: block;
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+
+  .card h2 {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .card p {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin-top: 12px;
+  }
+
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  /* CPU */
+  .card-cpu {
+    grid-column: 2;
+    grid-row: 1;
+    border-color: var(--cpu);
+    background: rgba(0,212,255,0.06);
+    box-shadow: 0 0 40px rgba(0,212,255,0.12), inset 0 1px 0 rgba(0,212,255,0.2);
+    color: var(--cpu);
+    animation-delay: 0.1s;
+    padding: 32px 28px;
+    min-width: 220px;
+    max-width: 280px;
+  }
+  .card-cpu h2 { color: var(--cpu); font-size: 22px; }
+  .tag-cpu { background: rgba(0,212,255,0.15); color: var(--cpu); border: 1px solid rgba(0,212,255,0.3); }
+
+  /* CPU Sub-units */
+  .cpu-internals {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    justify-content: center;
+  }
+  .cpu-unit {
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid rgba(0,212,255,0.3);
+    background: rgba(0,212,255,0.08);
+    color: rgba(0,212,255,0.9);
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  /* MEMORY */
+  .card-mem {
+    grid-column: 1;
+    grid-row: 1;
+    border-color: var(--mem);
+    background: rgba(167,139,250,0.06);
+    box-shadow: 0 0 40px rgba(167,139,250,0.1), inset 0 1px 0 rgba(167,139,250,0.2);
+    color: var(--mem);
+    animation-delay: 0.25s;
+  }
+  .card-mem h2 { color: var(--mem); }
+  .tag-mem { background: rgba(167,139,250,0.15); color: var(--mem); border: 1px solid rgba(167,139,250,0.3); }
+
+  /* DISK */
+  .card-disk {
+    grid-column: 3;
+    grid-row: 1;
+    border-color: var(--disk);
+    background: rgba(251,146,60,0.06);
+    box-shadow: 0 0 40px rgba(251,146,60,0.1), inset 0 1px 0 rgba(251,146,60,0.2);
+    color: var(--disk);
+    animation-delay: 0.25s;
+  }
+  .card-disk h2 { color: var(--disk); }
+  .tag-disk { background: rgba(251,146,60,0.15); color: var(--disk); border: 1px solid rgba(251,146,60,0.3); }
+
+  /* INPUT */
+  .card-input {
+    grid-column: 1;
+    grid-row: 3;
+    border-color: var(--io);
+    background: rgba(52,211,153,0.06);
+    box-shadow: 0 0 40px rgba(52,211,153,0.1), inset 0 1px 0 rgba(52,211,153,0.2);
+    color: var(--io);
+    animation-delay: 0.4s;
+  }
+  .card-input h2 { color: var(--io); }
+
+  /* OUTPUT */
+  .card-output {
+    grid-column: 3;
+    grid-row: 3;
+    border-color: var(--io);
+    background: rgba(52,211,153,0.06);
+    box-shadow: 0 0 40px rgba(52,211,153,0.1), inset 0 1px 0 rgba(52,211,153,0.2);
+    color: var(--io);
+    animation-delay: 0.55s;
+  }
+  .card-output h2 { color: var(--io); }
+  .tag-io { background: rgba(52,211,153,0.15); color: var(--io); border: 1px solid rgba(52,211,153,0.3); }
+
+  /* SPACER center-bottom */
+  .spacer-center {
+    grid-column: 2;
+    grid-row: 3;
+    height: 80px;
+  }
+
+  /* SVG ARROWS */
+  .arrows-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  /* ROW SPACERS for rows 2 */
+  .row-spacer {
+    grid-row: 2;
+    height: 80px;
+  }
+
+  /* LEGEND */
+  .legend {
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    animation: fadeUp 1s ease 0.8s both;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .legend-line {
+    width: 30px; height: 3px;
+    border-radius: 2px;
+    background: var(--bus);
+    box-shadow: 0 0 6px var(--bus);
+  }
+
+  /* FLOW TABLE */
+  .flow-section {
+    margin-top: 60px;
+    width: 100%;
+    animation: fadeUp 1s ease 1s both;
+  }
+
+  .flow-section h3 {
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    font-family: 'Space Mono', monospace;
+    text-align: center;
+  }
+
+  .flow-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .flow-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .flow-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .flow-card.fc-cpu::before { background: var(--cpu); }
+  .flow-card.fc-mem::before { background: var(--mem); }
+  .flow-card.fc-disk::before { background: var(--disk); }
+  .flow-card.fc-io::before { background: var(--io); }
+
+  .flow-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .flow-card.fc-cpu h4 { color: var(--cpu); }
+  .flow-card.fc-mem h4 { color: var(--mem); }
+  .flow-card.fc-disk h4 { color: var(--disk); }
+  .flow-card.fc-io h4 { color: var(--io); }
+
+  .flow-card p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse-bus {
+    0%, 100% { opacity: 0.8; box-shadow: 0 0 16px var(--bus), 0 0 30px rgba(251,191,36,0.2); }
+    50% { opacity: 1; box-shadow: 0 0 24px var(--bus), 0 0 60px rgba(251,191,36,0.4); }
+  }
+
+  @keyframes dash-anim {
+    to { stroke-dashoffset: -20; }
+  }
+
+  .arrow-animated {
+    stroke-dasharray: 8 6;
+    animation: dash-anim 1.2s linear infinite;
+  }
+
+  .arrow-animated-slow {
+    stroke-dasharray: 8 6;
+    animation: dash-anim 2s linear infinite;
+  }
+
+  /* DATA PACKET DOTS */
+  @keyframes travel-right {
+    0% { transform: translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateX(var(--travel)); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="label">Fundamentos de Computação</div>
+    <h1>Arquitetura Básica de Computador</h1>
+    <p>Diagrama de funcionamento e fluxo de dados entre os componentes principais</p>
+  </header>
+
+  <!-- DIAGRAM -->
+  <div class="diagram" id="diag">
+
+    <!-- ROW 1 -->
+    <!-- Memória Principal -->
+    <div class="card card-mem" style="animation-delay:0.2s">
+      <span class="icon">🧠</span>
+      <h2>Memória</h2>
+      <p>Armazenamento temporário de dados e instruções em uso pelo processador.</p>
+      <div class="card-tags">
+        <span class="tag tag-mem">RAM</span>
+        <span class="tag tag-mem">Cache</span>
+        <span class="tag tag-mem">Volátil</span>
+      </div>
+    </div>
+
+    <!-- CPU (centro) -->
+    <div class="card card-cpu" style="animation-delay:0.05s">
+      <span class="icon">⚙️</span>
+      <h2>CPU</h2>
+      <p>Unidade Central de Processamento — cérebro do computador.</p>
+      <div class="cpu-internals">
+        <div class="cpu-unit">ULA<br><span style="font-size:8px;opacity:0.7">Aritmética</span></div>
+        <div class="cpu-unit">UC<br><span style="font-size:8px;opacity:0.7">Controle</span></div>
+        <div class="cpu-unit">REG<br><span style="font-size:8px;opacity:0.7">Registros</span></div>
+      </div>
+    </div>
+
+    <!-- Disco -->
+    <div class="card card-disk" style="animation-delay:0.2s">
+      <span class="icon">💾</span>
+      <h2>Disco</h2>
+      <p>Armazenamento permanente de dados, programas e sistema operacional.</p>
+      <div class="card-tags">
+        <span class="tag tag-disk">HDD</span>
+        <span class="tag tag-disk">SSD</span>
+        <span class="tag tag-disk">Não-volátil</span>
+      </div>
+    </div>
+
+    <!-- ROW 2 (spacers for arrow paths) -->
+    <div class="row-spacer" style="grid-column:1"></div>
+    <div class="row-spacer" style="grid-column:2; position:relative;">
+      <!-- BUS label -->
+      <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center;">
+        <div style="font-family:'Space Mono',monospace; font-size:9px; letter-spacing:3px; color:var(--bus); text-transform:uppercase; margin-bottom:6px; white-space:nowrap;">Barramento de Sistema</div>
+        <div style="height:5px; width:220px; background:var(--bus); border-radius:3px; box-shadow:0 0 16px var(--bus), 0 0 40px rgba(251,191,36,0.3);"></div>
+        <div style="display:flex; justify-content:space-between; width:220px; margin-top:4px;">
+          <span style="font-family:'Space Mono',monospace; font-size:8px; color:rgba(251,191,36,0.5);">Dados</span>
+          <span style="font-family:'Space Mono',monospace; font-size:8px; color:rgba(251,191,36,0.5);">Endereços</span>
+          <span style="font-family:'Space Mono',monospace; font-size:8px; color:rgba(251,191,36,0.5);">Controle</span>
+        </div>
+      </div>
+    </div>
+    <div class="row-spacer" style="grid-column:3"></div>
+
+    <!-- ROW 3 -->
+    <!-- Input -->
+    <div class="card card-input" style="animation-delay:0.4s">
+      <span class="icon">⌨️</span>
+      <h2>Entrada</h2>
+      <p>Dispositivos que enviam dados ao computador para processamento.</p>
+      <div class="card-tags">
+        <span class="tag tag-io">Teclado</span>
+        <span class="tag tag-io">Mouse</span>
+        <span class="tag tag-io">Scanner</span>
+      </div>
+    </div>
+
+    <!-- Center bottom spacer -->
+    <div class="spacer-center">
+      <div style="height:100%; display:flex; align-items:center; justify-content:center;">
+        <div style="width:2px; height:60px; background: linear-gradient(to bottom, var(--bus), transparent); border-radius:2px;"></div>
+      </div>
+    </div>
+
+    <!-- Output -->
+    <div class="card card-output" style="animation-delay:0.55s">
+      <span class="icon">🖥️</span>
+      <h2>Saída</h2>
+      <p>Dispositivos que exibem ou transmitem os resultados do processamento.</p>
+      <div class="card-tags">
+        <span class="tag tag-io">Monitor</span>
+        <span class="tag tag-io">Impressora</span>
+        <span class="tag tag-io">Alto-falante</span>
+      </div>
+    </div>
+
+    <!-- SVG Arrows overlay -->
+    <svg class="arrows-svg" id="arrows" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-cpu" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="var(--cpu)" opacity="0.8"/>
+        </marker>
+        <marker id="arr-mem" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="var(--mem)" opacity="0.8"/>
+        </marker>
+        <marker id="arr-disk" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="var(--disk)" opacity="0.8"/>
+        </marker>
+        <marker id="arr-io" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="var(--io)" opacity="0.8"/>
+        </marker>
+        <marker id="arr-bus" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="var(--bus)" opacity="0.8"/>
+        </marker>
+      </defs>
+    </svg>
+
+  </div><!-- end diagram -->
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--cpu);box-shadow:0 0 6px var(--cpu)"></div>
+      Processador (CPU)
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--mem);box-shadow:0 0 6px var(--mem)"></div>
+      Memória Principal (RAM)
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--disk);box-shadow:0 0 6px var(--disk)"></div>
+      Unidade de Disco
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--io);box-shadow:0 0 6px var(--io)"></div>
+      Entrada / Saída
+    </div>
+    <div class="legend-item">
+      <div class="legend-line"></div>
+      Barramento (Bus)
+    </div>
+  </div>
+
+  <!-- FLOW SECTION -->
+  <div class="flow-section">
+    <h3>Funções dos Componentes</h3>
+    <div class="flow-grid">
+      <div class="flow-card fc-cpu">
+        <h4>⚙️ CPU — Processador</h4>
+        <p>Executa instruções, realiza cálculos aritméticos e lógicos (ULA) e coordena todos os outros componentes por meio da Unidade de Controle (UC).</p>
+      </div>
+      <div class="flow-card fc-mem">
+        <h4>🧠 Memória Principal</h4>
+        <p>Armazena dados e programas em execução. É volátil: seu conteúdo é perdido quando o computador é desligado. Muito mais rápida que o disco.</p>
+      </div>
+      <div class="flow-card fc-disk">
+        <h4>💾 Unidade de Disco</h4>
+        <p>Armazena permanentemente o sistema operacional, arquivos e programas. Não-volátil: preserva dados sem energia. HDD (magnético) ou SSD (flash).</p>
+      </div>
+      <div class="flow-card fc-io">
+        <h4>⌨️🖥️ Entrada / Saída</h4>
+        <p>Entrada: dispositivos que enviam dados ao sistema (teclado, mouse, câmera). Saída: dispositivos que exibem resultados (monitor, impressora, caixas de som).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CYCLE SECTION -->
+  <div class="flow-section" style="margin-top:40px">
+    <h3>Ciclo de Execução — Fetch · Decode · Execute</h3>
+    <div style="display:flex; gap:0; align-items:stretch; border:1px solid var(--border); border-radius:14px; overflow:hidden; background:var(--surface);">
+
+      <div style="flex:1; padding:22px 20px; border-right:1px solid var(--border); text-align:center;">
+        <div style="font-family:'Space Mono',monospace; font-size:22px; color:var(--cpu); margin-bottom:8px;">01</div>
+        <div style="font-weight:700; font-size:13px; color:var(--cpu); letter-spacing:1px; margin-bottom:8px;">BUSCA</div>
+        <p style="font-size:11px; color:var(--muted); font-family:'Space Mono',monospace; line-height:1.6">CPU busca a próxima instrução na memória via barramento de endereços.</p>
+      </div>
+
+      <div style="flex:1; padding:22px 20px; border-right:1px solid var(--border); text-align:center;">
+        <div style="font-family:'Space Mono',monospace; font-size:22px; color:var(--mem); margin-bottom:8px;">02</div>
+        <div style="font-weight:700; font-size:13px; color:var(--mem); letter-spacing:1px; margin-bottom:8px;">DECODIFICAÇÃO</div>
+        <p style="font-size:11px; color:var(--muted); font-family:'Space Mono',monospace; line-height:1.6">A Unidade de Controle interpreta o código da instrução recebida.</p>
+      </div>
+
+      <div style="flex:1; padding:22px 20px; border-right:1px solid var(--border); text-align:center;">
+        <div style="font-family:'Space Mono',monospace; font-size:22px; color:var(--disk); margin-bottom:8px;">03</div>
+        <div style="font-weight:700; font-size:13px; color:var(--disk); letter-spacing:1px; margin-bottom:8px;">EXECUÇÃO</div>
+        <p style="font-size:11px; color:var(--muted); font-family:'Space Mono',monospace; line-height:1.6">A ULA realiza a operação e o resultado é gravado em registros ou memória.</p>
+      </div>
+
+      <div style="flex:1; padding:22px 20px; text-align:center;">
+        <div style="font-family:'Space Mono',monospace; font-size:22px; color:var(--io); margin-bottom:8px;">↩︎</div>
+        <div style="font-weight:700; font-size:13px; color:var(--io); letter-spacing:1px; margin-bottom:8px;">REPETIÇÃO</div>
+        <p style="font-size:11px; color:var(--muted); font-family:'Space Mono',monospace; line-height:1.6">O ciclo recomeça bilhões de vezes por segundo (GHz) até o programa terminar.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <footer style="margin-top:50px; text-align:center; font-family:'Space Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:2px; padding-bottom:20px; animation: fadeUp 1s ease 1.2s both;">
+    ARQUITETURA DE COMPUTADORES · COMPONENTES BÁSICOS · VON NEUMANN
+  </footer>
+
+</div>
+</body>
+</html>
