@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPU · Memória · Entrada · Saída</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0f1118;
+  font-family: 'Syne', sans-serif;
+  color: #e8eaf0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+header h1 {
+  font-size: clamp(22px, 4vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+}
+
+header p {
+  margin-top: 8px;
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #4a5170;
+}
+
+/* ── DIAGRAM ── */
+.diagram {
+  display: grid;
+  grid-template-columns: 160px 80px 220px 80px 160px;
+  grid-template-rows: auto 60px auto 60px auto;
+  align-items: center;
+  justify-items: center;
+  position: relative;
+}
+
+/* ── BLOCKS ── */
+.block {
+  border-radius: 12px;
+  border: 1.5px solid;
+  padding: 18px 14px;
+  text-align: center;
+  width: 100%;
+}
+
+.block .icon { font-size: 28px; margin-bottom: 8px; display: block; }
+.block .name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.block .sub  { font-family: 'Fira Code', monospace; font-size: 10px; color: #5a6480; line-height: 1.5; }
+
+/* CPU */
+.cpu {
+  grid-column: 3; grid-row: 3;
+  border-color: #f0c040;
+  background: rgba(240,192,64,0.07);
+  box-shadow: 0 0 40px rgba(240,192,64,0.12);
+  animation: pulse 3s ease-in-out infinite;
+}
+.cpu .name { color: #f0c040; font-size: 20px; }
+
+/* Memory */
+.mem {
+  grid-column: 3; grid-row: 1;
+  border-color: #38bdf8;
+  background: rgba(56,189,248,0.07);
+}
+.mem .name { color: #38bdf8; }
+
+/* Input */
+.inp {
+  grid-column: 1; grid-row: 3;
+  border-color: #fb7185;
+  background: rgba(251,113,133,0.07);
+}
+.inp .name { color: #fb7185; }
+
+/* Output */
+.out {
+  grid-column: 5; grid-row: 3;
+  border-color: #4ade80;
+  background: rgba(74,222,128,0.07);
+}
+.out .name { color: #4ade80; }
+
+/* ── ARROWS ── */
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+
+/* horizontal arrows */
+.arrow-h {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.arr-line {
+  height: 2px;
+  width: 100%;
+  border-radius: 1px;
+  position: relative;
+}
+
+.arr-line::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+}
+
+.arr-line.to-right::after  { border-left-color: inherit; right: -10px; }
+.arr-line.to-left::after   { border-right-color: inherit; left: -10px; right: auto; }
+
+/* vertical arrow container */
+.arrow-v {
+  grid-column: 3;
+  flex-direction: column;
+  height: 60px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.arr-vert {
+  width: 2px;
+  flex: 1;
+  position: relative;
+  border-radius: 1px;
+}
+
+.arr-vert::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+}
+
+.arr-vert.to-down::after  { bottom: -10px; border-top-color: inherit; }
+.arr-vert.to-up::after    { top: -10px; border-bottom-color: inherit; }
+
+/* two-line arrows for bidirectional */
+.bidir {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.bidir-vert {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+}
+
+/* arrow label */
+.arr-label {
+  font-family: 'Fira Code', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* arrow grid positions */
+.arr-inp-cpu { grid-column: 2; grid-row: 3; }
+.arr-cpu-out { grid-column: 4; grid-row: 3; }
+.arr-cpu-mem { grid-column: 3; grid-row: 2; }
+
+/* ── ANIMATE lines ── */
+@keyframes dash-right { to { background-position: 200% center; } }
+@keyframes dash-up    { to { background-position: center -200%; } }
+@keyframes pulse      {
+  0%,100% { box-shadow: 0 0 30px rgba(240,192,64,0.10); }
+  50%     { box-shadow: 0 0 60px rgba(240,192,64,0.25); }
+}
+
+.arr-line {
+  background: repeating-linear-gradient(90deg, currentColor 0%, currentColor 50%, transparent 50%, transparent 100%);
+  background-size: 16px 2px;
+  animation: dash-right 1s linear infinite;
+}
+
+.arr-vert {
+  background: repeating-linear-gradient(180deg, currentColor 0%, currentColor 50%, transparent 50%, transparent 100%);
+  background-size: 2px 16px;
+  animation: dash-up 1s linear infinite;
+}
+
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  gap: 24px;
+  margin-top: 44px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Fira Code', monospace;
+  font-size: 10px;
+  color: #5a6480;
+}
+
+.leg-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Entradas, CPU, Memória e Saídas</h1>
+  <p>Fluxo de dados entre os componentes</p>
+</header>
+
+<div class="diagram">
+
+  <!-- INPUT -->
+  <div class="block inp">
+    <span class="icon">⌨️</span>
+    <div class="name">Entrada</div>
+    <div class="sub">Teclado · Mouse<br>Câmera · Rede</div>
+  </div>
+
+  <!-- Arrow: Input → CPU -->
+  <div class="arrow arrow-h arr-inp-cpu">
+    <div class="bidir">
+      <div class="arr-label" style="color:#fb7185">dado →</div>
+      <div class="arr-line to-right" style="color:#fb7185"></div>
+    </div>
+  </div>
+
+  <!-- MEMORY (top) -->
+  <div class="block mem">
+    <span class="icon">🧠</span>
+    <div class="name">Memória</div>
+    <div class="sub">Cache · RAM<br>Volátil · Rápida</div>
+  </div>
+
+  <!-- Arrow: CPU → Output -->
+  <div class="arrow arrow-h arr-cpu-out">
+    <div class="bidir">
+      <div class="arr-label" style="color:#4ade80">→ resultado</div>
+      <div class="arr-line to-right" style="color:#4ade80"></div>
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="block out">
+    <span class="icon">🖥️</span>
+    <div class="name">Saída</div>
+    <div class="sub">Monitor · Som<br>Impressora</div>
+  </div>
+
+  <!-- Row 2: vertical arrows CPU ↔ Mem -->
+  <div style="grid-column:1;grid-row:2"></div>
+  <div style="grid-column:2;grid-row:2"></div>
+
+  <div class="arrow arrow-v arr-cpu-mem" style="grid-column:3;grid-row:2">
+    <div class="bidir-vert">
+      <div class="arr-label" style="color:#38bdf8">instrução ↑</div>
+      <div style="display:flex;gap:12px;height:100%;align-items:stretch">
+        <div class="arr-vert to-up" style="color:#f0c040"></div>
+        <div class="arr-vert to-down" style="color:#38bdf8"></div>
+      </div>
+      <div class="arr-label" style="color:#f0c040">↓ endereço</div>
+    </div>
+  </div>
+
+  <div style="grid-column:4;grid-row:2"></div>
+  <div style="grid-column:5;grid-row:2"></div>
+
+  <!-- Row 3: CPU center -->
+  <div style="grid-column:1;grid-row:3"></div>
+  <div style="grid-column:2;grid-row:3"></div>
+
+  <!-- CPU -->
+  <div class="block cpu">
+    <span class="icon">⚙️</span>
+    <div class="name">CPU</div>
+    <div class="sub">UC · ULA · Registradores<br>Busca · Decodifica · Executa</div>
+  </div>
+
+  <div style="grid-column:4;grid-row:3"></div>
+  <div style="grid-column:5;grid-row:3"></div>
+
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><div class="leg-dot" style="background:#fb7185"></div>Entrada</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#f0c040"></div>CPU</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#38bdf8"></div>Memória</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#4ade80"></div>Saída</div>
+</div>
+
+</body>
+</html>

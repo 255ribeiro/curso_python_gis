@@ -37,6 +37,7 @@ repo_name: "255ribeiro/curso_python_gis"
 
 nav:
   - Home: index.md
+  - Fundamentos de computação: ./elementos_de_comp/aula-fundamentos-computacao.md
   - Instalação das ferramentas: intro_py\instala.md
   - Primeiros Passos: intro_py\intro_py.md
   - Programação Científica:

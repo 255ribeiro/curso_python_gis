@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terminal macOS — Comandos</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:     #1a1a1a;
+  --card:   #232323;
+  --border: #333333;
+  --nav:    #64d2ff;
+  --create: #30d158;
+  --delete: #ff453a;
+  --edit:   #ffd60a;
+  --yellow: #ffd60a;
+  --purple: #bf5af2;
+  --cyan:   #64d2ff;
+  --str:    #ff9f0a;
+  --muted:  #4a4a4a;
+  --muted2: #8e8e93;
+  --white:  #f2f2f7;
+  --prompt: #30d158;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Fira Code', monospace;
+  color: var(--white);
+  min-height: 100vh;
+  padding: 36px 22px 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wrapper { width: 100%; max-width: 1020px; }
+
+/* ── HEADER ── */
+header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 34px;
+}
+
+.mac-logo {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, #555 0%, #333 100%);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* traffic lights */
+.mac-dots {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 34px;
+}
+.mac-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+}
+
+.title-bar-area {
+  background: #2d2d2d;
+  border: 1px solid #444;
+  border-radius: 10px 10px 0 0;
+  padding: 9px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: -1px;
+}
+
+header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(20px, 3.5vw, 34px);
+  font-weight: 800;
+  color: #fff;
+}
+
+header p {
+  margin-top: 5px;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+
+.header-left { display: flex; flex-direction: column; }
+
+/* macOS window chrome */
+.window-chrome {
+  width: 100%;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 34px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.chrome-bar {
+  background: #3a3a3a;
+  border-bottom: 1px solid #444;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.chrome-dots { display: flex; gap: 7px; }
+.chrome-dot  { width: 12px; height: 12px; border-radius: 50%; }
+.d-red    { background: #ff5f57; }
+.d-yellow { background: #ffbd2e; }
+.d-green  { background: #28c940; }
+
+.chrome-title {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted2);
+  margin-right: 80px;
+}
+
+.chrome-body {
+  padding: 12px 18px 14px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.chrome-line { display: flex; gap: 6px; align-items: baseline; }
+.c-user  { color: var(--prompt); }
+.c-host  { color: var(--cyan); }
+.c-sep   { color: var(--muted2); }
+.c-path  { color: #5ac8fa; }
+.c-cmd2  { color: #ffd60a; }
+.c-out   { color: var(--muted2); font-size: 11px; }
+
+/* ── GRID ── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+/* ── SECTION ── */
+.section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.s-icon { font-size: 16px; }
+
+.section-head h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.s-nav    .section-head { border-left: 3px solid var(--nav);    }
+.s-create .section-head { border-left: 3px solid var(--create); }
+.s-delete .section-head { border-left: 3px solid var(--delete); }
+.s-edit   .section-head { border-left: 3px solid var(--edit);   }
+
+.s-nav    .section-head h2 { color: var(--nav);    }
+.s-create .section-head h2 { color: var(--create); }
+.s-delete .section-head h2 { color: var(--delete); }
+.s-edit   .section-head h2 { color: var(--edit);   }
+
+/* ── CMD ROW ── */
+.cmd-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  align-items: stretch;
+  border-bottom: 1px solid rgba(50,50,50,0.9);
+  transition: background 0.12s;
+}
+
+.cmd-row:last-child { border-bottom: none; }
+.cmd-row:hover { background: rgba(255,255,255,0.04); }
+
+.cmd-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 8px;
+  border-right: 1px solid var(--border);
+  background: rgba(0,0,0,0.25);
+}
+
+.badge-pill {
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 7px;
+  padding: 5px 8px;
+  letter-spacing: 0;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.s-nav    .badge-pill { background: rgba(100,210,255,0.12); color: var(--nav);    border: 1px solid rgba(100,210,255,0.3);  }
+.s-create .badge-pill { background: rgba(48,209,88,0.12);  color: var(--create); border: 1px solid rgba(48,209,88,0.28);   }
+.s-delete .badge-pill { background: rgba(255,69,58,0.12);  color: var(--delete); border: 1px solid rgba(255,69,58,0.3);    }
+.s-edit   .badge-pill { background: rgba(255,214,10,0.12); color: var(--yellow); border: 1px solid rgba(255,214,10,0.3);   }
+
+.cmd-detail {
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.cmd-full {
+  font-size: 11.5px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px;
+  line-height: 1.4;
+}
+
+.c-cmd  { color: var(--yellow); font-weight: 600; }
+.c-flag { color: var(--purple); }
+.c-arg  { color: var(--muted2); }
+.c-pt   { color: #5ac8fa; }
+.c-str  { color: var(--str); }
+.c-op   { color: var(--white); }
+
+.cmd-desc {
+  font-size: 10px;
+  color: var(--muted2);
+  line-height: 1.5;
+}
+
+/* ── TIPS ── */
+.tips {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.tip {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.tip h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  color: var(--yellow);
+  margin-bottom: 5px;
+}
+
+.tip p {
+  font-size: 10px;
+  color: var(--muted2);
+  line-height: 1.6;
+}
+
+.tip code {
+  color: var(--cyan);
+  background: rgba(0,0,0,0.3);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 10px;
+}
+
+footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="mac-logo">🍎</div>
+    <div class="header-left">
+      <h1>Terminal macOS — Comandos Essenciais</h1>
+      <p>Navegação · Criação · Exclusão · Edição de texto</p>
+    </div>
+  </header>
+
+  <!-- macOS terminal preview -->
+  <div class="window-chrome">
+    <div class="chrome-bar">
+      <div class="chrome-dots">
+        <div class="chrome-dot d-red"></div>
+        <div class="chrome-dot d-yellow"></div>
+        <div class="chrome-dot d-green"></div>
+      </div>
+      <div class="chrome-title">alice@macbook — zsh — 80×24</div>
+    </div>
+    <div class="chrome-body">
+      <div class="chrome-line">
+        <span class="c-user">alice</span><span class="c-sep">@</span><span class="c-host">macbook</span><span class="c-sep">:</span><span class="c-path">~/Documentos</span><span class="c-sep">$</span>
+        <span class="c-cmd2">ls</span><span class="c-arg2" style="color:#64d2ff"> -la</span>
+      </div>
+      <div class="chrome-line"><span class="c-out">total 48</span></div>
+      <div class="chrome-line"><span class="c-out">drwxr-xr-x  5 alice staff  160 Mar 2 09:14 .</span></div>
+      <div class="chrome-line"><span class="c-out">drwxr-xr-x 18 alice staff  576 Mar 2 08:50 ..</span></div>
+      <div class="chrome-line"><span class="c-out">-rw-r--r--  1 alice staff 2048 Mar 2 09:10 notas.txt</span></div>
+      <div class="chrome-line"><span class="c-out">drwxr-xr-x  3 alice staff   96 Mar 1 14:22 projetos</span></div>
+      <div class="chrome-line" style="margin-top:4px">
+        <span class="c-user">alice</span><span class="c-sep">@</span><span class="c-host">macbook</span><span class="c-sep">:</span><span class="c-path">~/Documentos</span><span class="c-sep">$</span>
+        <span style="color:#f2f2f7">▋</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- ══ NAVEGAÇÃO ══ -->
+    <div class="section s-nav">
+      <div class="section-head">
+        <span class="s-icon">🧭</span>
+        <h2>Navegação</h2>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">pwd</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">pwd</span></div>
+          <div class="cmd-desc">Exibe o diretório atual (Print Working Directory).</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">cd</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">cd</span> <span class="c-pt">~/Documentos</span></div>
+          <div class="cmd-desc">Navega para o caminho indicado.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">cd ..</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">cd</span> <span class="c-arg">..</span></div>
+          <div class="cmd-desc">Sobe um nível na hierarquia de pastas.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">cd ~</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">cd</span> <span class="c-arg">~</span></div>
+          <div class="cmd-desc">Vai direto para o diretório home do usuário.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">ls</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">ls</span></div>
+          <div class="cmd-desc">Lista arquivos e pastas do diretório atual.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">ls -la</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">ls</span> <span class="c-flag">-la</span></div>
+          <div class="cmd-desc">Lista com detalhes: permissões, tamanho, data e arquivos ocultos.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ CRIAÇÃO ══ -->
+    <div class="section s-create">
+      <div class="section-head">
+        <span class="s-icon">✨</span>
+        <h2>Criar Arquivos e Pastas</h2>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">mkdir</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">mkdir</span> <span class="c-arg">pasta</span></div>
+          <div class="cmd-desc">Cria um novo diretório.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">mkdir -p</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">mkdir</span> <span class="c-flag">-p</span> <span class="c-pt">a/b/c</span></div>
+          <div class="cmd-desc">Cria diretórios aninhados de uma vez.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">touch</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">touch</span> <span class="c-arg">notas.txt</span></div>
+          <div class="cmd-desc">Cria arquivo vazio ou atualiza data de modificação.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">cp</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">cp</span> <span class="c-arg">origem.txt</span> <span class="c-arg">destino.txt</span></div>
+          <div class="cmd-desc">Copia arquivo para outro local ou nome.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">mv</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">mv</span> <span class="c-arg">arquivo.txt</span> <span class="c-pt">./pasta/</span></div>
+          <div class="cmd-desc">Move ou renomeia arquivo ou pasta.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ EXCLUSÃO ══ -->
+    <div class="section s-delete">
+      <div class="section-head">
+        <span class="s-icon">🗑️</span>
+        <h2>Apagar Arquivos e Pastas</h2>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">rm</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">rm</span> <span class="c-arg">notas.txt</span></div>
+          <div class="cmd-desc">Apaga o arquivo especificado. ⚠️ Permanente — não vai para a lixeira.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">rm -r</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">rm</span> <span class="c-flag">-r</span> <span class="c-arg">pasta</span></div>
+          <div class="cmd-desc">Apaga pasta e todo o seu conteúdo recursivamente.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">rm -rf</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">rm</span> <span class="c-flag">-rf</span> <span class="c-arg">pasta</span></div>
+          <div class="cmd-desc">Força exclusão sem confirmação. ⚠️ Use com cuidado.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">rm *.ext</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">rm</span> <span class="c-arg">*.log</span></div>
+          <div class="cmd-desc">Apaga todos os arquivos com a extensão especificada.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ EDIÇÃO ══ -->
+    <div class="section s-edit">
+      <div class="section-head">
+        <span class="s-icon">📝</span>
+        <h2>Abrir Arquivo para Edição</h2>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">open</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">open</span> <span class="c-arg">notas.txt</span></div>
+          <div class="cmd-desc">Abre com o app padrão do sistema (TextEdit, etc).</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">nano</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">nano</span> <span class="c-arg">notas.txt</span></div>
+          <div class="cmd-desc">Editor de texto no próprio terminal. Simples e amigável.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">vim</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">vim</span> <span class="c-arg">notas.txt</span></div>
+          <div class="cmd-desc">Editor avançado no terminal. Sair: <code style="color:var(--cyan)">:q!</code> ou salvar: <code style="color:var(--cyan)">:wq</code></div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">cat</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">cat</span> <span class="c-arg">notas.txt</span></div>
+          <div class="cmd-desc">Exibe o conteúdo do arquivo no terminal.</div>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-badge"><span class="badge-pill">echo</span></div>
+        <div class="cmd-detail">
+          <div class="cmd-full"><span class="c-cmd">echo</span> <span class="c-str">"texto"</span> <span class="c-op">&gt;&gt;</span> <span class="c-arg">notas.txt</span></div>
+          <div class="cmd-desc">Acrescenta linha ao final do arquivo sem sobrescrever.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- TIPS -->
+  <div class="tips">
+    <div class="tip">
+      <h4>⭐ Autocompletar</h4>
+      <p>Pressione <code>Tab</code> para completar comandos, caminhos e nomes de arquivos.</p>
+    </div>
+    <div class="tip">
+      <h4>🔼 Histórico</h4>
+      <p>Use <code>↑</code> <code>↓</code> para rever comandos. <code>history</code> lista todos os anteriores.</p>
+    </div>
+    <div class="tip">
+      <h4>🆘 Manual</h4>
+      <p>Digite <code>man &lt;cmd&gt;</code> para abrir o manual completo do comando. Sair: <code>q</code>.</p>
+    </div>
+    <div class="tip">
+      <h4>🍎 Shell padrão</h4>
+      <p>macOS usa <code>zsh</code> desde o Catalina (2019). Antes usava <code>bash</code>. Comandos são compatíveis.</p>
+    </div>
+  </div>
+
+  <footer>macOS Terminal · zsh / bash · Comandos Essenciais · Arquitetura de Sistemas</footer>
+
+</div>
+</body>
+</html>
