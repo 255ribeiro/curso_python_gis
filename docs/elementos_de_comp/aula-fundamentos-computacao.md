@@ -137,6 +137,8 @@ pixi run python script.py
 
 [instalação](install_vscode.html)
 
+[Pacote de extensões utilizadas no curso](https://marketplace.visualstudio.com/items?itemName=255ribeiro.pypixipack)
+
 ## 🗂️ Todos os Diagramas
 
 | Arquivo | Tema |
