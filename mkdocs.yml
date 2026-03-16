@@ -38,8 +38,10 @@ repo_name: "255ribeiro/curso_python_gis"
 nav:
   - Home: index.md
   - Fundamentos de computação: ./elementos_de_comp/aula-fundamentos-computacao.md
-  - Instalação das ferramentas: intro_py\instala.md
+  - Configurações extras no Mac: ./elementos_de_comp/pixi_on_mac.md
+  # - Instalação das ferramentas: intro_py\instala.md
   - Primeiros Passos: intro_py\intro_py.md
+  - pacotes extras para programação científica com pixi: docs/elementos_de_comp/pixi_install_extra.md
   - Programação Científica:
       - Jupyter notebooks: cientif_py\jupyter_intro.ipynb
       - numpy: cientif_py\numpy_intro.ipynb
